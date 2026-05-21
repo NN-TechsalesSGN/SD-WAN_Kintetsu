@@ -1,0 +1,176 @@
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define styles -->
+  <defs>
+    <style>
+      .site-box { fill: #E8F4F8; stroke: #0066cc; stroke-width: 2; }
+      .isp-box { fill: #FFE8CC; stroke: #FF8C00; stroke-width: 2; }
+      .device-box { fill: #D4E6F1; stroke: #0066cc; stroke-width: 1.5; }
+      .site-title { font-size: 16px; font-weight: bold; fill: #003366; }
+      .site-info { font-size: 12px; fill: #333333; }
+      .connection-line { stroke: #333333; stroke-width: 2; }
+      .vpn-line { stroke: #FF0000; stroke-width: 2; stroke-dasharray: 5,5; }
+      .internet-line { stroke: #FF6600; stroke-width: 2; }
+      .label { font-size: 11px; fill: #333333; font-weight: bold; }
+      .isp-label { font-size: 12px; fill: #FF8C00; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="30" style="font-size: 24px; font-weight: bold; text-anchor: middle; fill: #003366;">
+    Hiện trạng Kết nối WAN/Internet - NetNam SDWAN
+  </text>
+
+  <!-- ===== INTERNET CLOUD ===== -->
+  <circle cx="700" cy="80" r="30" fill="#FFF4E6" stroke="#FF8C00" stroke-width="2"/>
+  <text x="700" y="85" style="font-size: 12px; font-weight: bold; text-anchor: middle; fill: #FF8C00;">Internet</text>
+
+  <!-- ===== SITE HÀ NỘI (Left - 200 users) ===== -->
+  <!-- Site Box -->
+  <rect x="80" y="200" width="250" height="200" class="site-box" rx="8"/>
+  <text x="205" y="225" class="site-title" text-anchor="middle">📍 HÀ NỘI</text>
+  <text x="205" y="245" class="site-info" text-anchor="middle">200 Users</text>
+
+  <!-- Network Devices -->
+  <rect x="110" y="260" width="140" height="35" class="device-box" rx="4"/>
+  <text x="180" y="283" style="font-size: 11px; text-anchor: middle; fill: #003366; font-weight: bold;">Core Router/VPN GW</text>
+
+  <!-- ISP Connections -->
+  <rect x="100" y="310" width="60" height="35" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="130" y="333" class="label" text-anchor="middle" style="font-size: 10px;">ILL</text>
+
+  <rect x="190" y="310" width="60" height="35" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="220" y="333" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- Backup label -->
+  <text x="245" y="365" style="font-size: 10px; fill: #FF6600; font-style: italic;">(backup)</text>
+
+  <!-- ===== SITE TP. HỒ CHÍ MINH (Right - 150 users) ===== -->
+  <!-- Site Box -->
+  <rect x="1070" y="200" width="250" height="200" class="site-box" rx="8"/>
+  <text x="1195" y="225" class="site-title" text-anchor="middle">📍 TP. HỒ CHÍ MINH</text>
+  <text x="1195" y="245" class="site-info" text-anchor="middle">150 Users</text>
+
+  <!-- Network Devices -->
+  <rect x="1100" y="260" width="140" height="35" class="device-box" rx="4"/>
+  <text x="1170" y="283" style="font-size: 11px; text-anchor: middle; fill: #003366; font-weight: bold;">Core Router/VPN GW</text>
+
+  <!-- ISP Connections -->
+  <rect x="1090" y="310" width="60" height="35" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="1120" y="333" class="label" text-anchor="middle" style="font-size: 10px;">ILL</text>
+
+  <rect x="1180" y="310" width="60" height="35" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="1210" y="333" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- Backup label -->
+  <text x="1245" y="365" style="font-size: 10px; fill: #FF6600; font-style: italic;">(backup)</text>
+
+  <!-- ===== SITE TỈNH 1 ===== -->
+  <rect x="250" y="550" width="180" height="140" class="site-box" rx="8"/>
+  <text x="340" y="570" class="site-title" text-anchor="middle">Site Tỉnh 1</text>
+  <text x="340" y="590" class="site-info" text-anchor="middle">10-20 Users</text>
+  <rect x="275" y="605" width="130" height="30" class="device-box" rx="4"/>
+  <text x="340" y="625" style="font-size: 10px; text-anchor: middle; fill: #003366;">Local Router</text>
+  <rect x="285" y="645" width="110" height="28" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="340" y="664" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- ===== SITE TỈNH 2 ===== -->
+  <rect x="550" y="550" width="180" height="140" class="site-box" rx="8"/>
+  <text x="640" y="570" class="site-title" text-anchor="middle">Site Tỉnh 2</text>
+  <text x="640" y="590" class="site-info" text-anchor="middle">10-20 Users</text>
+  <rect x="575" y="605" width="130" height="30" class="device-box" rx="4"/>
+  <text x="640" y="625" style="font-size: 10px; text-anchor: middle; fill: #003366;">Local Router</text>
+  <rect x="585" y="645" width="110" height="28" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="640" y="664" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- ===== SITE TỈNH 3 ===== -->
+  <rect x="850" y="550" width="180" height="140" class="site-box" rx="8"/>
+  <text x="940" y="570" class="site-title" text-anchor="middle">Site Tỉnh 3</text>
+  <text x="940" y="590" class="site-info" text-anchor="middle">10-20 Users</text>
+  <rect x="875" y="605" width="130" height="30" class="device-box" rx="4"/>
+  <text x="940" y="625" style="font-size: 10px; text-anchor: middle; fill: #003366;">Local Router</text>
+  <rect x="885" y="645" width="110" height="28" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="940" y="664" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- ===== SITE TỈNH 4 & 5 (combined view) ===== -->
+  <rect x="1150" y="550" width="180" height="140" class="site-box" rx="8"/>
+  <text x="1240" y="570" class="site-title" text-anchor="middle">Site Tỉnh 4, 5</text>
+  <text x="1240" y="590" class="site-info" text-anchor="middle">10-20 Users (each)</text>
+  <rect x="1175" y="605" width="130" height="30" class="device-box" rx="4"/>
+  <text x="1240" y="625" style="font-size: 10px; text-anchor: middle; fill: #003366;">Local Router</text>
+  <rect x="1185" y="645" width="110" height="28" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1.5" rx="3"/>
+  <text x="1240" y="664" class="label" text-anchor="middle" style="font-size: 10px;">FTTx</text>
+
+  <!-- ===== CONNECTIONS ===== -->
+
+  <!-- Hà Nội to Internet (ILL) -->
+  <line x1="205" y1="200" x2="650" y2="110" class="internet-line" stroke-dasharray="none"/>
+  <text x="380" y="150" class="label" fill="#FF6600">Direct Internet (ILL)</text>
+
+  <!-- Hà Nội to Internet (FTTx) -->
+  <line x1="250" y1="200" x2="680" y2="110" class="internet-line" stroke="#FF9933" opacity="0.6" stroke-dasharray="none"/>
+  <text x="380" y="180" class="label" fill="#FF9933">Direct Internet (FTTx-backup)</text>
+
+  <!-- HCM to Internet (ILL) -->
+  <line x1="1195" y1="200" x2="750" y2="110" class="internet-line" stroke-dasharray="none"/>
+  <text x="1050" y="150" class="label" fill="#FF6600">Direct Internet (ILL)</text>
+
+  <!-- HCM to Internet (FTTx) -->
+  <line x1="1150" y1="200" x2="720" y2="110" class="internet-line" stroke="#FF9933" opacity="0.6" stroke-dasharray="none"/>
+  <text x="1050" y="180" class="label" fill="#FF9933">Direct Internet (FTTx-backup)</text>
+
+  <!-- Site Tỉnh 1 to Internet -->
+  <line x1="340" y1="550" x2="550" y2="110" class="internet-line" stroke="#FF9933" opacity="0.5"/>
+  <text x="380" y="320" class="label" fill="#FF9933" style="font-size: 10px;">Direct Internet</text>
+
+  <!-- Site Tỉnh 2 to Internet -->
+  <line x1="640" y1="550" x2="650" y2="110" class="internet-line" stroke="#FF9933" opacity="0.5"/>
+
+  <!-- Site Tỉnh 3 to Internet -->
+  <line x1="940" y1="550" x2="750" y2="110" class="internet-line" stroke="#FF9933" opacity="0.5"/>
+
+  <!-- Site Tỉnh 4-5 to Internet -->
+  <line x1="1240" y1="550" x2="800" y2="110" class="internet-line" stroke="#FF9933" opacity="0.5"/>
+
+  <!-- VPN Site-to-Site Connections (Hà Nội as HUB) -->
+  <!-- Hà Nội to HCM -->
+  <line x1="330" y1="280" x2="1070" y2="280" class="vpn-line"/>
+  <text x="700" y="270" class="label" text-anchor="middle" fill="#FF0000">VPN S2S</text>
+
+  <!-- Hà Nội to Tỉnh 1 -->
+  <path d="M 280 300 Q 280 420 340 500" class="vpn-line" fill="none"/>
+  <text x="250" y="400" class="label" style="font-size: 9px;" fill="#FF0000">VPN S2S</text>
+
+  <!-- Hà Nội to Tỉnh 2 -->
+  <path d="M 290 310 Q 400 420 600 500" class="vpn-line" fill="none"/>
+
+  <!-- Hà Nội to Tỉnh 3 -->
+  <path d="M 310 320 Q 550 420 900 500" class="vpn-line" fill="none"/>
+
+  <!-- Hà Nội to Tỉnh 4-5 -->
+  <path d="M 330 330 Q 700 420 1190 500" class="vpn-line" fill="none"/>
+
+  <!-- ===== LEGEND ===== -->
+  <g>
+    <text x="50" y="780" style="font-size: 14px; font-weight: bold; fill: #003366;">CHÚ THÍCH:</text>
+
+    <!-- Internet Line -->
+    <line x1="50" y1="810" x2="100" y2="810" class="internet-line"/>
+    <text x="110" y="815" style="font-size: 12px; fill: #333333;">Đường truyền Internet trực tiếp (Direct Internet Breakout)</text>
+
+    <!-- VPN Line -->
+    <line x1="50" y1="840" x2="100" y2="840" class="vpn-line"/>
+    <text x="110" y="845" style="font-size: 12px; fill: #333333;">Kết nối VPN Site-to-Site (S2S)</text>
+
+    <!-- ISP Types -->
+    <rect x="50" y="860" width="20" height="20" fill="#FFE8D6" stroke="#FF8C00" stroke-width="1"/>
+    <text x="110" y="875" style="font-size: 12px; fill: #333333;">ILL = Kết nối chuyên dùng | FTTx = Kết nối Fiber To The x (Backup)</text>
+  </g>
+
+  <!-- ===== KEY NOTES ===== -->
+  <g style="font-size: 11px; fill: #003366;">
+    <text x="50" y="750" style="font-weight: bold;">MỘT SỐ ĐẶC ĐIỂM HIỆN TẠI:</text>
+    <text x="60" y="765">• Site Hà Nội &amp; HCM: 2 đường truyền (ILL + FTTx backup)</text>
+    <text x="60" y="776">• Site Tỉnh (4-5 sites): 1 đường FTTx duy nhất</text>
+    <text x="60" y="787">• Kết nối giữa các site: VPN S2S truyền thống (HUB-SPOKE từ HN &amp; HCM)</text>
+  </g>
+</svg>

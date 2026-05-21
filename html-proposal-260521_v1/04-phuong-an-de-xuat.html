@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phương án đề xuất — NetNam SD-WAN Proposal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Two-panel layout ── */
+    .proposal-layout {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      min-height: calc(100vh - 82px);
+      align-items: start;
+    }
+
+    /* ── Sidebar ── */
+    .proposal-sidebar {
+      position: sticky;
+      top: 82px;
+      height: calc(100vh - 82px);
+      overflow-y: auto;
+      background: rgba(0,0,0,0.2);
+      border-right: 1px solid var(--border);
+      padding: 28px 0 40px;
+    }
+    .sidebar-header {
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 20px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px;
+      font-size: 13px; color: var(--text-secondary);
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+    .sidebar-nav li a:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.04);
+    }
+    .sidebar-nav li a.active {
+      color: var(--accent-cyan);
+      background: rgba(0,217,255,0.07);
+      border-left-color: var(--accent-cyan);
+    }
+    .sidebar-nav li a.active::after {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-cyan);
+      position: absolute; right: 16px; top: 50%;
+      transform: translateY(-50%);
+    }
+    .sidebar-icon { font-size: 16px; flex-shrink: 0; }
+    .sidebar-label { flex: 1; line-height: 1.4; }
+    .sidebar-num {
+      font-size: 10px; font-weight: 700;
+      color: var(--text-muted); letter-spacing: 0.5px;
+      margin-bottom: 1px;
+    }
+    .sidebar-name { font-weight: 600; }
+
+    /* ── Main content ── */
+    .proposal-main {
+      padding: 40px 48px 72px;
+      max-width: 900px;
+      width: 100%;
+      justify-self: center;
+    }
+
+    /* Section anchor offset */
+    .anchor-target { scroll-margin-top: 80px; }
+
+    /* ── Section label + title ── */
+    .section-eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent-cyan); margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 24px; font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 20px; line-height: 1.3;
+    }
+
+    /* ── Principle cards 4-column grid (4.1) ── */
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0;
+    }
+    .pcard {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-cyan);
+      border-radius: var(--radius);
+      padding: 18px 15px;
+      display: flex; flex-direction: column;
+      transition: var(--transition);
+    }
+    .pcard:hover { background: var(--bg-card-hover); }
+    .pcard-num {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent-cyan); margin-bottom: 10px;
+    }
+    .pcard-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+      line-height: 1.45;
+    }
+    .pcard-desc {
+      font-size: 12px; color: var(--text-secondary);
+      line-height: 1.65; flex: 1;
+    }
+
+    /* ── HLD Diagram placeholders (4.2) ── */
+    .hld-section {
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-cyan);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .hld-header {
+      padding: 14px 20px;
+      background: rgba(0,217,255,0.04);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hld-header-icon { font-size: 18px; }
+    .hld-label {
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+    }
+    .hld-sub {
+      font-size: 12px; color: var(--text-muted); margin-top: 2px;
+    }
+    .hld-body { padding: 16px; }
+    .hld-placeholder {
+      min-height: 240px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px;
+      border: 2px dashed rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.015);
+    }
+    .hld-icon { font-size: 40px; opacity: 0.25; }
+    .hld-note {
+      font-size: 13px; color: var(--text-muted); font-style: italic;
+    }
+
+    /* ── Site spec cards (4.2) ── */
+    .site-spec {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .site-spec-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .site-spec.hub    .site-spec-header { background: rgba(0,217,255,0.06);   border-top: 3px solid var(--accent-cyan); }
+    .site-spec.branch .site-spec-header { background: rgba(255,149,0,0.06);   border-top: 3px solid var(--accent-orange); }
+    .site-spec.mgmt   .site-spec-header { background: rgba(139,92,246,0.06);  border-top: 3px solid var(--accent-purple); }
+
+    .site-spec-role {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .hub    .site-spec-role { color: var(--accent-cyan); }
+    .branch .site-spec-role { color: var(--accent-orange); }
+    .mgmt   .site-spec-role { color: var(--accent-purple); }
+
+    .site-spec-name {
+      font-size: 15px; font-weight: 700; color: var(--text-primary);
+    }
+    .site-spec-badge {
+      font-size: 12px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .hub    .site-spec-badge { background: rgba(0,217,255,0.12); color: var(--accent-cyan);   border: 1px solid rgba(0,217,255,0.3); }
+    .branch .site-spec-badge { background: rgba(255,149,0,0.12); color: var(--accent-orange); border: 1px solid rgba(255,149,0,0.3); }
+    .mgmt   .site-spec-badge { background: rgba(139,92,246,0.12); color: var(--accent-purple); border: 1px solid rgba(139,92,246,0.3); }
+
+    .site-spec-rows { padding: 4px 0; }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 12px;
+      padding: 9px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-key { color: var(--text-muted); font-weight: 500; }
+    .spec-val { color: var(--text-secondary); line-height: 1.55; }
+    .spec-val strong { color: var(--text-primary); font-weight: 600; }
+    .spec-val .tag {
+      display: inline-block;
+      font-size: 11.5px; font-weight: 600;
+      padding: 2px 10px; border-radius: 4px;
+      margin-right: 4px;
+    }
+    .tag-cyan   { background: rgba(0,217,255,0.12);  color: var(--accent-cyan);   border: 1px solid rgba(0,217,255,0.3); }
+    .tag-orange { background: rgba(255,149,0,0.12);  color: var(--accent-orange); border: 1px solid rgba(255,149,0,0.3); }
+    .tag-green  { background: rgba(0,217,150,0.12);  color: var(--accent-green);  border: 1px solid rgba(0,217,150,0.3); }
+
+    /* ── Deploy blocks (4.3) ── */
+    .deploy-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 14px; overflow: hidden;
+    }
+    .deploy-block-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .deploy-block.dh   .deploy-block-header { background: rgba(0,217,255,0.06);  border-top: 3px solid var(--accent-cyan); }
+    .deploy-block.dn   .deploy-block-header { background: rgba(255,149,0,0.06);  border-top: 3px solid var(--accent-orange); }
+    .deploy-block.note .deploy-block-header { background: rgba(255,184,0,0.06);  border-top: 3px solid var(--accent-gold); }
+
+    .deploy-block-title {
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+    }
+    .deploy-block-icon { font-size: 18px; }
+    .deploy-list { list-style: none; padding: 8px 0; }
+    .deploy-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 20px;
+      font-size: 13px; color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      line-height: 1.6;
+    }
+    .deploy-list li:last-child { border-bottom: none; }
+    .deploy-list li::before {
+      content: '›'; color: var(--accent-cyan);
+      font-size: 16px; font-weight: 700;
+      flex-shrink: 0; margin-top: -1px;
+    }
+    .deploy-list li strong { color: var(--text-primary); font-weight: 600; }
+
+    /* ── Note paragraphs (Ghi chú block) ── */
+    .note-content { padding: 4px 0; }
+    .note-para {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.72;
+      padding: 11px 20px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .note-para:last-child { border-bottom: none; }
+    .note-para strong { color: var(--text-primary); font-weight: 600; }
+
+    /* ── Ops card grid (4.4) ── */
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0;
+    }
+    .ops-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-green);
+      border-radius: var(--radius);
+      padding: 18px 15px;
+      display: flex; flex-direction: column;
+      transition: var(--transition);
+    }
+    .ops-card:hover { background: var(--bg-card-hover); }
+    .ops-card-icon { font-size: 22px; margin-bottom: 12px; }
+    .ops-card-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .ops-card-desc {
+      font-size: 12px; color: var(--text-secondary);
+      line-height: 1.65; flex: 1;
+    }
+
+    /* ── Horizontal roadmap (4.5) ── */
+    .roadmap-h { margin: 28px 0; }
+
+    /* Track: circles + connecting line */
+    .rh-track {
+      display: flex; align-items: flex-start;
+      position: relative;
+      padding-bottom: 0;
+    }
+    .rh-track::before {
+      content: '';
+      position: absolute;
+      top: 22px; left: 22px; right: 22px;
+      height: 2px; background: var(--border);
+      z-index: 0;
+    }
+    .rh-step {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+    .rh-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      margin-bottom: 10px; flex-shrink: 0;
+    }
+    .rh-dot.s1 { border: 2px solid var(--accent-cyan);   color: var(--accent-cyan); }
+    .rh-dot.s2 { border: 2px solid var(--accent-purple); color: var(--accent-purple); }
+    .rh-dot.s3 { border: 2px solid var(--accent-orange); color: var(--accent-orange); }
+    .rh-dot.s4 { border: 2px solid var(--accent-green);  color: var(--accent-green); }
+    .rh-dot.s5 { border: 2px solid var(--accent-gold);   color: var(--accent-gold); }
+    .rh-step-label {
+      font-size: 11px; font-weight: 700;
+      text-align: center; color: var(--text-secondary);
+      line-height: 1.4; padding: 0 4px;
+    }
+    .rh-connector {
+      width: 2px; height: 16px;
+      background: var(--border);
+      margin: 0 auto;
+    }
+
+    /* Cards row */
+    .rh-cards {
+      display: flex; gap: 10px;
+      margin-top: 0;
+    }
+    .rh-card {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 10px;
+      transition: var(--transition);
+    }
+    .rh-card:hover { background: var(--bg-card-hover); }
+    .rh-card.s1 { border-top: 2px solid var(--accent-cyan); }
+    .rh-card.s2 { border-top: 2px solid var(--accent-purple); }
+    .rh-card.s3 { border-top: 2px solid var(--accent-orange); }
+    .rh-card.s4 { border-top: 2px solid var(--accent-green); }
+    .rh-card.s5 { border-top: 2px solid var(--accent-gold); }
+    .rh-items { list-style: none; }
+    .rh-items li {
+      font-size: 11px; color: var(--text-secondary);
+      line-height: 1.55;
+      padding: 4px 0 4px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      position: relative;
+    }
+    .rh-items li:last-child { border-bottom: none; }
+    .rh-items li::before {
+      content: '·';
+      position: absolute; left: 0;
+      color: var(--text-muted); font-size: 16px; top: 0;
+    }
+
+    /* ── Estimated note box ── */
+    .note-box {
+      background: rgba(255,184,0,0.05);
+      border: 1px solid rgba(255,184,0,0.2);
+      border-left: 4px solid var(--accent-gold);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.72; margin: 20px 0;
+      text-align: left;
+    }
+    .note-box strong { color: var(--text-primary); }
+
+    /* ── Section divider ── */
+    .main-divider {
+      height: 1px; background: var(--border);
+      margin: 44px 0;
+    }
+
+    /* ── Prose paragraph ── */
+    .prose {
+      font-size: 13.5px; color: var(--text-secondary);
+      line-height: 1.72; margin-bottom: 20px;
+    }
+
+    /* ── BOM Table (4.6) ── */
+    .bom-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    .bom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .bom-table thead th {
+      background: rgba(0,217,255,0.06);
+      color: var(--text-muted);
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .bom-table thead th:nth-child(1) { width: 42px; text-align: center; }
+    .bom-table thead th:nth-child(4) { width: 130px; text-align: center; }
+    .bom-table thead th:nth-child(5) { width: 110px; text-align: center; }
+
+    /* Category divider row */
+    .bom-cat-row td {
+      padding: 9px 14px;
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 1.8px; text-transform: uppercase;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .bom-cat-row.g1 td { color: var(--accent-cyan);   background: rgba(0,217,255,0.04); }
+    .bom-cat-row.g2 td { color: var(--accent-green);  background: rgba(0,217,150,0.04); }
+    .bom-cat-row.g3 td { color: var(--accent-orange); background: rgba(255,149,0,0.04); }
+    .bom-cat-row.g4 td { color: var(--accent-purple); background: rgba(139,92,246,0.04); }
+    .bom-cat-row.g1:first-child td { border-top: none; }
+
+    /* Item rows */
+    .bom-table tbody tr.bom-item {
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s;
+    }
+    .bom-table tbody tr.bom-item:hover { background: rgba(255,255,255,0.025); }
+    .bom-table tbody tr.bom-item td {
+      padding: 10px 14px;
+      color: var(--text-secondary);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .bom-table tbody tr.bom-item td:first-child {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 11px; font-weight: 700;
+    }
+    .bom-item-name { color: var(--text-primary); font-weight: 600; }
+    .bom-item-note { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+
+    /* Badges */
+    .badge-capex, .badge-opex {
+      display: inline-block;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.8px;
+      padding: 3px 10px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-capex {
+      background: rgba(255,149,0,0.12);
+      color: var(--accent-orange);
+      border: 1px solid rgba(255,149,0,0.3);
+    }
+    .badge-opex {
+      background: rgba(0,217,255,0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0,217,255,0.25);
+    }
+    .bom-badge-cell { text-align: center; }
+    .bom-unit-cell {
+      text-align: center;
+      font-size: 12px; color: var(--text-muted); font-style: italic;
+    }
+
+    /* Disclaimer note */
+    .bom-note {
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(255,184,0,0.05);
+      border: 1px solid rgba(255,184,0,0.18);
+      border-left: 4px solid var(--accent-gold);
+      border-radius: var(--radius);
+      font-size: 12.5px; color: var(--text-secondary);
+      line-height: 1.65;
+    }
+    .bom-note strong { color: var(--accent-gold); }
+
+    @media (max-width: 960px) {
+      .proposal-layout { grid-template-columns: 1fr; }
+      .proposal-sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+      .proposal-main { padding: 28px 20px 60px; }
+      .spec-row { grid-template-columns: 140px 1fr; }
+      .principle-grid, .ops-grid { grid-template-columns: repeat(2, 1fr); }
+      .rh-cards { flex-wrap: wrap; }
+      .rh-cards .rh-card { flex: 0 0 calc(50% - 5px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">NN</div>
+      <span class="navbar-name">NetNam <span>SD-WAN</span></span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="index.html">Trang bìa</a></li>
+      <li><a href="01-gioi-thieu-sdwan.html">01 · Giới thiệu SD-WAN</a></li>
+      <li><a href="02-dich-vu-netnam.html">02 · Dịch vụ NetNam</a></li>
+      <li><a href="03-hien-trang-khach-hang.html">03 · Hiện trạng KH</a></li>
+      <li><a href="04-phuong-an-de-xuat.html" class="active">04 · Phương án đề xuất</a></li>
+      <li><a href="05-cach-thuc-hoat-dong.html">05 · Cách thức hoạt động</a></li>
+      <li><a href="06-giam-sat-tap-trung.html">06 · SD-WAN GUI trên FortiManager</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══ TWO-PANEL LAYOUT ══ -->
+  <div class="proposal-layout">
+
+    <!-- ── Left Sidebar ── -->
+    <aside class="proposal-sidebar">
+      <div class="sidebar-header">Phương án kỹ thuật</div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="#s41" class="active">
+            <span class="sidebar-icon">📐</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.1</div>
+              <div class="sidebar-name">Nguyên tắc thiết kế</div>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#s42">
+            <span class="sidebar-icon">🗺️</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.2</div>
+              <div class="sidebar-name">Mô hình kiến trúc</div>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#s43">
+            <span class="sidebar-icon">📍</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.3</div>
+              <div class="sidebar-name">Triển khai theo site</div>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#s44">
+            <span class="sidebar-icon">⚙️</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.4</div>
+              <div class="sidebar-name">Quản trị &amp; vận hành</div>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#s45">
+            <span class="sidebar-icon">📅</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.5</div>
+              <div class="sidebar-name">Lộ trình triển khai</div>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="#s46">
+            <span class="sidebar-icon">📋</span>
+            <span class="sidebar-label">
+              <div class="sidebar-num">MỤC 4.6</div>
+              <div class="sidebar-name">Danh mục dịch vụ</div>
+            </span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="proposal-main">
+
+      <!-- ─── 4.1 Nguyên tắc thiết kế ─── -->
+      <section id="s41" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.1 — Nguyên tắc thiết kế</p>
+        <h2 class="section-title">Nguyên tắc thiết kế giải pháp</h2>
+
+        <p class="prose">
+          Phương án SD-WAN đề xuất cho khách hàng được xây dựng theo các nguyên tắc chính sau:
+        </p>
+
+        <div class="principle-grid">
+
+          <div class="pcard">
+            <div class="pcard-num">01</div>
+            <div class="pcard-name">Tận dụng hạ tầng đường truyền hiện hữu tại các site lớn</div>
+            <div class="pcard-desc">Hà Nội và TP. Hồ Chí Minh hiện đã có ILL và FTTx, phù hợp để đưa vào mô hình SD-WAN. NetNam đề xuất đánh giá lại băng thông hiện tại để cân nhắc điều chỉnh dung lượng ILL/FTTx theo nhu cầu thực tế.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">02</div>
+            <div class="pcard-name">Tăng tính dự phòng cho các site nhỏ</div>
+            <div class="pcard-desc">Với các site tỉnh hiện chỉ có 1 line FTTx, đề xuất bổ sung thêm 1 line FTTx từ ISP khác để tăng tính sẵn sàng và giảm phụ thuộc vào một nhà mạng duy nhất.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">03</div>
+            <div class="pcard-name">One-stop-shop cho hạ tầng đường truyền</div>
+            <div class="pcard-desc">NetNam có thể cung cấp hoặc điều phối toàn bộ các line Internet tại các site, bao gồm ILL, FTTx và dịch vụ resell FTTx từ các ISP khác. Mô hình này giúp khách hàng có một đầu mối làm việc khi triển khai, vận hành và xử lý sự cố đường truyền.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">04</div>
+            <div class="pcard-name">Local Internet Breakout tại từng site</div>
+            <div class="pcard-desc">Lưu lượng Internet và SaaS, đặc biệt là Microsoft 365, sẽ được ưu tiên đi trực tiếp tại từng site thay vì kéo toàn bộ về site trung tâm.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">05</div>
+            <div class="pcard-name">ADVPN cho dữ liệu nội bộ</div>
+            <div class="pcard-desc">Các kết nối nội bộ giữa site và site trung tâm, hoặc giữa các site khi cần, có thể được thiết lập thông qua ADVPN nhằm tối ưu kết nối VPN và giảm thao tác cấu hình thủ công.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">06</div>
+            <div class="pcard-name">Mô hình dual-hub</div>
+            <div class="pcard-desc">Hà Nội và TP. Hồ Chí Minh đóng vai trò 2 hub chính, giúp tăng khả năng dự phòng và hỗ trợ điều hướng kết nối linh hoạt hơn cho các site nhánh.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">07</div>
+            <div class="pcard-name">Quản trị tập trung</div>
+            <div class="pcard-desc">Sử dụng FortiManager để quản lý cấu hình, policy, object, firmware và thay đổi cấu hình trên toàn bộ hệ thống FortiGate.</div>
+          </div>
+
+          <div class="pcard">
+            <div class="pcard-num">08</div>
+            <div class="pcard-name">Giám sát và báo cáo theo nhu cầu</div>
+            <div class="pcard-desc">Cân nhắc bổ sung FortiAnalyzer nếu khách hàng cần các tính năng phân tích log, báo cáo bảo mật, báo cáo vận hành chuyên sâu hoặc hỗ trợ điều tra sự cố.</div>
+          </div>
+
+        </div>
+
+        <div class="note-box">
+          <strong>Lưu ý:</strong> Các đề xuất về thiết bị và đường truyền trong phần này chỉ mang tính <strong>estimated</strong> ban đầu. Cần thực hiện khảo sát chi tiết về băng thông, số lượng user thực tế, throughput, security profile, VPN, log/reporting và chính sách vận hành để lựa chọn đúng model FortiGate, hình thức FortiManager/FortiAnalyzer và mức băng thông phù hợp.
+        </div>
+      </section>
+
+      <div class="main-divider"></div>
+
+      <!-- ─── 4.2 Mô hình kiến trúc ─── -->
+      <section id="s42" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.2 — Mô hình kiến trúc</p>
+        <h2 class="section-title">Mô hình kiến trúc đề xuất</h2>
+
+        <p class="prose">
+          NetNam đề xuất mô hình SD-WAN gồm 2 site hub chính và các site nhánh kết nối về hệ thống trung tâm.
+        </p>
+
+        <!-- Site Hà Nội -->
+        <div class="site-spec hub">
+          <div class="site-spec-header">
+            <div>
+              <div class="site-spec-role">Hub chính · Miền Bắc</div>
+              <div class="site-spec-name">Site Hà Nội</div>
+            </div>
+            <span class="site-spec-badge">~200 users</span>
+          </div>
+          <div class="site-spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Vai trò</span>
+              <span class="spec-val"><strong>Hub chính</strong> khu vực miền Bắc</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Thiết bị đề xuất</span>
+              <span class="spec-val"><span class="tag tag-cyan">FortiGate 120G</span></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Đường truyền hiện hữu</span>
+              <span class="spec-val">ILL và FTTx</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Khuyến nghị</span>
+              <span class="spec-val">Đánh giá lại mức băng thông ILL/FTTx hiện tại để đảm bảo phù hợp với nhu cầu truy cập Internet, Microsoft 365, VPN nội bộ và dự phòng</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Phương án NetNam cung cấp</span>
+              <span class="spec-val"><span class="tag tag-cyan">1 line ILL · NetNam</span> <span class="tag tag-green">1 line FTTx · ISP khác</span> — đảm bảo tối thiểu 2 ISP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Site TP.HCM -->
+        <div class="site-spec hub">
+          <div class="site-spec-header">
+            <div>
+              <div class="site-spec-role">Hub chính · Miền Nam</div>
+              <div class="site-spec-name">Site TP. Hồ Chí Minh</div>
+            </div>
+            <span class="site-spec-badge">~150 users</span>
+          </div>
+          <div class="site-spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Vai trò</span>
+              <span class="spec-val"><strong>Hub chính</strong> khu vực miền Nam</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Thiết bị đề xuất</span>
+              <span class="spec-val"><span class="tag tag-cyan">FortiGate 120G</span></span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Đường truyền hiện hữu</span>
+              <span class="spec-val">ILL và FTTx</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Khuyến nghị</span>
+              <span class="spec-val">Đánh giá lại mức băng thông ILL/FTTx hiện tại để đảm bảo phù hợp với nhu cầu truy cập Internet, Microsoft 365, VPN nội bộ và dự phòng</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Phương án NetNam cung cấp</span>
+              <span class="spec-val"><span class="tag tag-cyan">1 line ILL · NetNam</span> <span class="tag tag-green">1 line FTTx · ISP khác</span> — đảm bảo tối thiểu 2 ISP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Các site nhánh -->
+        <div class="site-spec branch">
+          <div class="site-spec-header">
+            <div>
+              <div class="site-spec-role">Site nhánh · ~4–5 tỉnh</div>
+              <div class="site-spec-name">Các site nhánh tại tỉnh</div>
+            </div>
+            <span class="site-spec-badge">10–20 users/site</span>
+          </div>
+          <div class="site-spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Vai trò</span>
+              <span class="spec-val">Site nhánh kết nối về hệ thống SD-WAN</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Thiết bị đề xuất</span>
+              <span class="spec-val"><span class="tag tag-orange">FortiGate 30F</span> hoặc <span class="tag tag-orange">FortiGate 40F</span> — tùy theo số lượng user, băng thông, số lượng đường truyền và yêu cầu bảo mật tại từng site</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Đường truyền hiện hữu</span>
+              <span class="spec-val">1 line FTTx</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Khuyến nghị</span>
+              <span class="spec-val">Bổ sung thêm 1 line FTTx từ ISP khác để hỗ trợ failover và tăng tính dự phòng</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Phương án NetNam cung cấp</span>
+              <span class="spec-val">Dịch vụ <strong>resell FTTx</strong> từ các ISP khác, tùy theo khu vực triển khai và khả năng đáp ứng hạ tầng của từng nhà mạng</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quản trị tập trung -->
+        <div class="site-spec mgmt">
+          <div class="site-spec-header">
+            <div>
+              <div class="site-spec-role">Nền tảng quản trị</div>
+              <div class="site-spec-name">Quản trị tập trung</div>
+            </div>
+          </div>
+          <div class="site-spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Phương án 1</span>
+              <span class="spec-val">Sử dụng mô hình <strong>cloud-based management</strong> của Fortinet nếu phù hợp với nhu cầu quản trị, license và chính sách vận hành của khách hàng</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Phương án 2</span>
+              <span class="spec-val">Triển khai <strong>FortiManager VM</strong> trên cloud của khách hàng hoặc cloud của NetNam</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Vai trò</span>
+              <span class="spec-val">Quản lý tập trung cấu hình, policy, object, firmware và thay đổi cấu hình trên toàn bộ FortiGate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FortiAnalyzer -->
+        <div class="site-spec mgmt">
+          <div class="site-spec-header">
+            <div>
+              <div class="site-spec-role">Giám sát &amp; Phân tích log</div>
+              <div class="site-spec-name">FortiAnalyzer</div>
+            </div>
+          </div>
+          <div class="site-spec-rows">
+            <div class="spec-row">
+              <span class="spec-key">Xem xét triển khai khi</span>
+              <span class="spec-val">Cần thu thập và lưu trữ log tập trung, báo cáo lưu lượng/ứng dụng/bảo mật, phân tích sự kiện điều tra sự cố, hoặc báo cáo vận hành/bảo mật định kỳ</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">Hình thức triển khai</span>
+              <span class="spec-val">Hardware appliance hoặc virtual machine, tùy theo quy mô và yêu cầu lưu trữ log</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HLD Diagram hiện tại -->
+        <div class="hld-section">
+          <div class="hld-header">
+            <span class="hld-header-icon">🗂️</span>
+            <div>
+              <div class="hld-label">HLD Diagram hiện tại</div>
+              <div class="hld-sub">Sơ đồ kiến trúc mạng hiện tại của khách hàng</div>
+            </div>
+          </div>
+          <div class="hld-body">
+            <div class="hld-placeholder">
+              <div class="hld-icon">🖼️</div>
+              <div class="hld-note">Hình ảnh HLD hiện tại sẽ được bổ sung sau</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HLD Diagram đề xuất -->
+        <div class="hld-section">
+          <div class="hld-header">
+            <span class="hld-header-icon">📐</span>
+            <div>
+              <div class="hld-label">HLD Diagram đề xuất</div>
+              <div class="hld-sub">Sơ đồ kiến trúc SD-WAN NetNam đề xuất cho khách hàng</div>
+            </div>
+          </div>
+          <div class="hld-body">
+            <div class="hld-placeholder">
+              <div class="hld-icon">🖼️</div>
+              <div class="hld-note">Hình ảnh HLD đề xuất sẽ được bổ sung sau</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="main-divider"></div>
+
+      <!-- ─── 4.3 Phương án triển khai theo site ─── -->
+      <section id="s43" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.3 — Triển khai</p>
+        <h2 class="section-title">Phương án triển khai theo từng địa điểm</h2>
+
+        <!-- HN & HCM -->
+        <div class="deploy-block dh">
+          <div class="deploy-block-header">
+            <span class="deploy-block-icon">🏢</span>
+            <div class="deploy-block-title">Hà Nội và TP. Hồ Chí Minh</div>
+          </div>
+          <ul class="deploy-list">
+            <li>Triển khai <strong>FortiGate 120G</strong> tại mỗi site.</li>
+            <li>Tích hợp 2 đường truyền gồm <strong>ILL và FTTx</strong> vào SD-WAN zone.</li>
+            <li>Với phương án NetNam cung cấp đường truyền, mỗi site chính có thể sử dụng <strong>1 line ILL của NetNam</strong> và <strong>1 line FTTx từ ISP khác</strong>.</li>
+            <li>Thiết lập chính sách ưu tiên và dự phòng giữa các đường truyền.</li>
+            <li>Cấu hình <strong>Local Internet Breakout</strong> cho lưu lượng Internet/SaaS.</li>
+            <li>Thiết lập vai trò <strong>hub</strong> trong mô hình dual-hub.</li>
+            <li>Thiết lập <strong>ADVPN</strong> để phục vụ kết nối dữ liệu nội bộ giữa các site.</li>
+          </ul>
+        </div>
+
+        <!-- Site nhánh -->
+        <div class="deploy-block dn">
+          <div class="deploy-block-header">
+            <span class="deploy-block-icon">📍</span>
+            <div class="deploy-block-title">Các site nhánh tại tỉnh</div>
+          </div>
+          <ul class="deploy-list">
+            <li>Triển khai <strong>FortiGate 30F hoặc 40F</strong> tùy theo sizing sau khảo sát.</li>
+            <li>Tích hợp đường truyền FTTx hiện hữu vào SD-WAN.</li>
+            <li>Đề xuất bổ sung thêm <strong>1 line FTTx từ ISP khác</strong>.</li>
+            <li>NetNam có thể cung cấp dịch vụ <strong>resell FTTx</strong> từ các ISP khác tại các site nhánh.</li>
+            <li>Thiết lập <strong>Local Internet Breakout</strong> tại từng site.</li>
+            <li>Thiết lập <strong>ADVPN</strong> kết nối về 2 hub Hà Nội và TP. Hồ Chí Minh.</li>
+            <li>Áp dụng <strong>policy bảo mật và routing thống nhất</strong> theo thiết kế chung.</li>
+          </ul>
+        </div>
+
+        <!-- Ghi chú đường truyền — dùng note-para thay vì deploy-list để tránh khoảng trống chữ -->
+        <div class="deploy-block note">
+          <div class="deploy-block-header">
+            <span class="deploy-block-icon">💡</span>
+            <div class="deploy-block-title">Ghi chú về phương án cung cấp đường truyền</div>
+          </div>
+          <div class="note-content">
+            <div class="note-para">NetNam có thể cung cấp toàn bộ các line Internet tại các site, bao gồm ILL và FTTx. Với Hà Nội và TP. Hồ Chí Minh: <strong>1 line ILL do NetNam cung cấp</strong> và <strong>1 line FTTx từ ISP khác</strong> để đảm bảo tính đa dạng nhà mạng.</div>
+            <div class="note-para">Tại các site nhánh, NetNam có thể cung cấp dịch vụ <strong>resell FTTx</strong> từ các ISP khác, tùy theo khu vực triển khai và khả năng đáp ứng hạ tầng của từng nhà mạng.</div>
+            <div class="note-para">Với mô hình này, NetNam đóng vai trò <strong>one-stop-shop</strong> cho hạ tầng đường truyền tại tất cả các site, đồng thời vẫn đảm bảo mỗi site có tối thiểu 2 ISP. Khi phát sinh sự cố, NetNam chủ động phối hợp với ISP liên quan để xử lý và cập nhật tình trạng cho khách hàng.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="main-divider"></div>
+
+      <!-- ─── 4.4 Quản trị & vận hành ─── -->
+      <section id="s44" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.4 — Vận hành dịch vụ</p>
+        <h2 class="section-title">Phương án quản trị, giám sát và vận hành dịch vụ</h2>
+
+        <p class="prose">
+          NetNam đề xuất mô hình quản trị và vận hành tập trung, trong đó các FortiGate tại Hà Nội, TP. Hồ Chí Minh và các site nhánh được quản lý theo cùng một tiêu chuẩn cấu hình.
+        </p>
+
+        <div class="ops-grid">
+
+          <div class="ops-card">
+            <div class="ops-card-icon">⚙️</div>
+            <div class="ops-card-name">Quản trị cấu hình tập trung</div>
+            <div class="ops-card-desc">Sử dụng FortiManager hoặc cloud-based management của Fortinet để quản lý policy, object, firmware và thay đổi cấu hình.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">🔀</div>
+            <div class="ops-card-name">Vận hành SD-WAN policy</div>
+            <div class="ops-card-desc">Theo dõi và điều chỉnh các rule điều hướng lưu lượng theo chất lượng đường truyền, ứng dụng và nhu cầu nghiệp vụ.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">📡</div>
+            <div class="ops-card-name">Giám sát đường truyền</div>
+            <div class="ops-card-desc">Theo dõi trạng thái ILL, FTTx, latency, jitter, packet loss và sự kiện failover tại từng site.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">🔐</div>
+            <div class="ops-card-name">Giám sát VPN/ADVPN</div>
+            <div class="ops-card-desc">Theo dõi trạng thái tunnel, kết nối giữa các site và các sự kiện bất thường liên quan đến VPN.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">🛡️</div>
+            <div class="ops-card-name">Giám sát bảo mật</div>
+            <div class="ops-card-desc">Theo dõi sự kiện liên quan đến firewall policy, IPS, Application Control, Web Filtering hoặc các profile bảo mật khác nếu được kích hoạt.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">🔧</div>
+            <div class="ops-card-name">Phối hợp xử lý sự cố đường truyền</div>
+            <div class="ops-card-desc">Khi có sự cố liên quan đến ISP, NetNam chủ động phối hợp với nhà mạng để kiểm tra, xử lý và cập nhật tình trạng cho khách hàng.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">📊</div>
+            <div class="ops-card-name">Báo cáo định kỳ</div>
+            <div class="ops-card-desc">Cung cấp báo cáo về tình trạng đường truyền, sự kiện failover, chất lượng kết nối, lưu lượng và các vấn đề vận hành đáng chú ý.</div>
+          </div>
+
+          <div class="ops-card">
+            <div class="ops-card-icon">🤝</div>
+            <div class="ops-card-name">Hỗ trợ và xử lý sự cố</div>
+            <div class="ops-card-desc">NetNam phối hợp với khách hàng và ISP để tiếp nhận, phân tích, xử lý hoặc khuyến nghị phương án khắc phục khi phát sinh sự cố.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="main-divider"></div>
+
+      <!-- ─── 4.5 Lộ trình triển khai ─── -->
+      <section id="s45" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.5 — Lộ trình</p>
+        <h2 class="section-title">Lộ trình triển khai dự kiến</h2>
+
+        <p class="prose" style="margin-bottom: 28px;">
+          Lộ trình triển khai có thể chia thành các bước chính sau:
+        </p>
+
+        <div class="roadmap-h">
+
+          <!-- Track: dots + connecting line + labels -->
+          <div class="rh-track">
+
+            <div class="rh-step">
+              <div class="rh-dot s1">1</div>
+              <div class="rh-step-label">Khảo sát<br>chi tiết</div>
+              <div class="rh-connector"></div>
+            </div>
+
+            <div class="rh-step">
+              <div class="rh-dot s2">2</div>
+              <div class="rh-step-label">Thiết kế<br>chi tiết</div>
+              <div class="rh-connector"></div>
+            </div>
+
+            <div class="rh-step">
+              <div class="rh-dot s3">3</div>
+              <div class="rh-step-label">Triển khai<br>Pilot</div>
+              <div class="rh-connector"></div>
+            </div>
+
+            <div class="rh-step">
+              <div class="rh-dot s4">4</div>
+              <div class="rh-step-label">Triển khai<br>diện rộng</div>
+              <div class="rh-connector"></div>
+            </div>
+
+            <div class="rh-step">
+              <div class="rh-dot s5">5</div>
+              <div class="rh-step-label">Bàn giao<br>&amp; vận hành</div>
+              <div class="rh-connector"></div>
+            </div>
+
+          </div>
+
+          <!-- Cards: detail content per step -->
+          <div class="rh-cards">
+
+            <div class="rh-card s1">
+              <ul class="rh-items">
+                <li>Xác nhận số lượng site, user, băng thông hiện hữu, sơ đồ kết nối, routing, VPN và yêu cầu bảo mật.</li>
+                <li>Đánh giá hiện trạng ILL/FTTx tại Hà Nội, TP. Hồ Chí Minh và các site tỉnh.</li>
+                <li>Xác định nhu cầu bổ sung hoặc điều chỉnh đường truyền tại từng site.</li>
+                <li>Làm rõ phương án NetNam cung cấp trực tiếp hoặc resell các line Internet theo từng địa điểm.</li>
+              </ul>
+            </div>
+
+            <div class="rh-card s2">
+              <ul class="rh-items">
+                <li>Chốt model FortiGate phù hợp cho từng nhóm site.</li>
+                <li>Chốt mô hình FortiManager, FortiAnalyzer nếu cần.</li>
+                <li>Thiết kế SD-WAN zone, ADVPN, dual-hub, Local Internet Breakout và security policy.</li>
+                <li>Thiết kế phương án đường truyền đảm bảo mỗi site có tối thiểu 2 ISP nếu khách hàng chọn mô hình one-stop-shop.</li>
+              </ul>
+            </div>
+
+            <div class="rh-card s3">
+              <ul class="rh-items">
+                <li>Triển khai trước tại một số site đại diện.</li>
+                <li>Kiểm thử failover, truy cập Microsoft 365, kết nối nội bộ, ADVPN và chính sách bảo mật.</li>
+                <li>Ghi nhận kết quả và tinh chỉnh thiết kế.</li>
+              </ul>
+            </div>
+
+            <div class="rh-card s4">
+              <ul class="rh-items">
+                <li>Triển khai cho Hà Nội, TP. Hồ Chí Minh và các site nhánh theo kế hoạch.</li>
+                <li>Onboard thiết bị vào hệ thống quản trị tập trung.</li>
+                <li>Kiểm thử kết nối, chính sách và giám sát sau triển khai.</li>
+              </ul>
+            </div>
+
+            <div class="rh-card s5">
+              <ul class="rh-items">
+                <li>Bàn giao tài liệu cấu hình, sơ đồ kết nối, quy trình vận hành và kênh hỗ trợ.</li>
+                <li>Thiết lập báo cáo định kỳ.</li>
+                <li>Chuyển sang giai đoạn vận hành, monitor và support theo phạm vi dịch vụ thống nhất.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── 4.6 Danh mục dịch vụ ─── -->
+      <div class="main-divider"></div>
+
+      <section id="s46" class="anchor-target">
+        <p class="section-eyebrow">Mục 4.6 — Danh mục dịch vụ</p>
+        <h2 class="section-title">Danh mục dịch vụ và hình thức cung cấp</h2>
+
+        <p class="prose">
+          Dưới đây là danh mục các hạng mục NetNam cung cấp trong khuôn khổ dịch vụ SD-WAN Managed Services, phân theo nhóm thiết bị/phần mềm, đường truyền, triển khai và vận hành — cùng hình thức thanh toán tương ứng.
+        </p>
+
+        <div class="bom-wrap">
+          <table class="bom-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Danh mục dịch vụ / Hạng mục</th>
+                <th>Ghi chú / Phân loại</th>
+                <th>Hình thức</th>
+                <th>Đơn vị</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- Group 1: Thiết bị & Phần mềm -->
+              <tr class="bom-cat-row g1">
+                <td colspan="5">🖥 Nhóm 1 — Thiết bị &amp; Phần mềm</td>
+              </tr>
+              <tr class="bom-item">
+                <td>1</td>
+                <td>
+                  <div class="bom-item-name">FortiGate — Site loại Hub (Trung tâm)</div>
+                  <div class="bom-item-note">Hà Nội, TP. HCM — FortiGate phân khúc mid-range</div>
+                </td>
+                <td>Per site</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Site</td>
+              </tr>
+              <tr class="bom-item">
+                <td>2</td>
+                <td>
+                  <div class="bom-item-name">FortiGate — Site loại Branch (Chi nhánh)</div>
+                  <div class="bom-item-note">Site tỉnh — FortiGate phân khúc entry/small-branch</div>
+                </td>
+                <td>Per site</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Site</td>
+              </tr>
+              <tr class="bom-item">
+                <td>3</td>
+                <td>
+                  <div class="bom-item-name">FortiManager — Hệ thống quản trị tập trung</div>
+                  <div class="bom-item-note">License theo số lượng device, VM hoặc appliance</div>
+                </td>
+                <td>Toàn hệ thống</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Hệ thống</td>
+              </tr>
+              <tr class="bom-item">
+                <td>4</td>
+                <td>
+                  <div class="bom-item-name">FortiAnalyzer — Hệ thống phân tích &amp; log tập trung</div>
+                  <div class="bom-item-note">License theo GB/day log, VM hoặc appliance</div>
+                </td>
+                <td>Toàn hệ thống</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Hệ thống</td>
+              </tr>
+
+              <!-- Group 2: Đường truyền Internet -->
+              <tr class="bom-cat-row g2">
+                <td colspan="5">🌐 Nhóm 2 — Đường truyền Internet</td>
+              </tr>
+              <tr class="bom-item">
+                <td>5</td>
+                <td>
+                  <div class="bom-item-name">Đường truyền ILL (Internet Leased Line)</div>
+                  <div class="bom-item-note">Dành cho Hub site: Hà Nội, TP. HCM — NetNam cung cấp trực tiếp</div>
+                </td>
+                <td>Per line / site</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Line / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>6</td>
+                <td>
+                  <div class="bom-item-name">Đường truyền FTTx</div>
+                  <div class="bom-item-note">Tất cả site — NetNam cung cấp trực tiếp hoặc resell ISP khác</div>
+                </td>
+                <td>Per line / site</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Line / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>7</td>
+                <td>
+                  <div class="bom-item-name">Đường truyền Resell ISP (4G/LTE dự phòng)</div>
+                  <div class="bom-item-note">Tùy chọn — dự phòng cho site branch khi cần thêm kết nối</div>
+                </td>
+                <td>Per line / site</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Line / tháng</td>
+              </tr>
+
+              <!-- Group 3: Dịch vụ triển khai -->
+              <tr class="bom-cat-row g3">
+                <td colspan="5">🔧 Nhóm 3 — Dịch vụ triển khai</td>
+              </tr>
+              <tr class="bom-item">
+                <td>8</td>
+                <td>
+                  <div class="bom-item-name">Khảo sát hiện trạng &amp; phân tích yêu cầu</div>
+                  <div class="bom-item-note">Thu thập thông tin site, topo mạng, băng thông, VPN, security policy</div>
+                </td>
+                <td>1 gói</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
+                <td class="bom-unit-cell">Gói</td>
+              </tr>
+              <tr class="bom-item">
+                <td>9</td>
+                <td>
+                  <div class="bom-item-name">Thiết kế giải pháp &amp; lập tài liệu HLD/LLD</div>
+                  <div class="bom-item-note">Sơ đồ kiến trúc, đặc tả kỹ thuật, thiết kế SD-WAN zone, ADVPN, policy</div>
+                </td>
+                <td>1 gói</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
+                <td class="bom-unit-cell">Gói</td>
+              </tr>
+              <tr class="bom-item">
+                <td>10</td>
+                <td>
+                  <div class="bom-item-name">Cấu hình, tích hợp &amp; kiểm thử hệ thống</div>
+                  <div class="bom-item-note">Triển khai toàn bộ thiết bị, cấu hình SD-WAN, kiểm thử failover, routing, policy</div>
+                </td>
+                <td>1 gói</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
+                <td class="bom-unit-cell">Gói</td>
+              </tr>
+              <tr class="bom-item">
+                <td>11</td>
+                <td>
+                  <div class="bom-item-name">Bàn giao &amp; nghiệm thu hệ thống</div>
+                  <div class="bom-item-note">Bàn giao tài liệu as-built, hướng dẫn vận hành, đào tạo cơ bản cho khách hàng</div>
+                </td>
+                <td>1 gói</td>
+                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
+                <td class="bom-unit-cell">Gói</td>
+              </tr>
+
+              <!-- Group 4: Dịch vụ quản trị vận hành -->
+              <tr class="bom-cat-row g4">
+                <td colspan="5">⚙️ Nhóm 4 — Dịch vụ quản trị vận hành</td>
+              </tr>
+              <tr class="bom-item">
+                <td>12</td>
+                <td>
+                  <div class="bom-item-name">Giám sát hệ thống 24/7</div>
+                  <div class="bom-item-note">Theo dõi trạng thái thiết bị, tunnel VPN, đường truyền và cảnh báo sự cố</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>13</td>
+                <td>
+                  <div class="bom-item-name">Xử lý sự cố &amp; hỗ trợ kỹ thuật</div>
+                  <div class="bom-item-note">Tiếp nhận, phân loại, xử lý sự cố theo SLA; hỗ trợ remote và onsite khi cần</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>14</td>
+                <td>
+                  <div class="bom-item-name">Quản lý cấu hình &amp; thay đổi (Change Management)</div>
+                  <div class="bom-item-note">Cập nhật policy, routing, security rule theo yêu cầu khách hàng</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>15</td>
+                <td>
+                  <div class="bom-item-name">Nâng cấp firmware &amp; vá lỗi bảo mật</div>
+                  <div class="bom-item-note">Lên kế hoạch và thực hiện firmware update theo khuyến nghị Fortinet</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>16</td>
+                <td>
+                  <div class="bom-item-name">Báo cáo định kỳ &amp; đánh giá hiệu năng</div>
+                  <div class="bom-item-note">Báo cáo tháng: uptime, hiệu năng đường truyền, log sự cố, đề xuất cải thiện</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+              <tr class="bom-item">
+                <td>17</td>
+                <td>
+                  <div class="bom-item-name">Quản lý license &amp; gia hạn dịch vụ</div>
+                  <div class="bom-item-note">Theo dõi hạn license FortiGate/FortiManager/FortiAnalyzer, cảnh báo gia hạn</div>
+                </td>
+                <td>1 gói / tháng</td>
+                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
+                <td class="bom-unit-cell">Gói / tháng</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bom-note">
+          <strong>⚠ Lưu ý:</strong> Danh mục trên <strong>chưa bao gồm</strong> chi phí hạ tầng phòng máy (rack, UPS, cáp kết nối nội bộ) và vật tư phụ (SFP module, dây cáp quang, phụ kiện lắp đặt). Các hạng mục này sẽ được thống kê và báo giá riêng sau khi hoàn thành giai đoạn khảo sát thực địa.
+        </div>
+
+      </section>
+
+      <!-- Page nav -->
+      <div style="margin-top: 60px;">
+        <nav class="page-nav" style="padding: 0; max-width: 100%;">
+          <a href="03-hien-trang-khach-hang.html" class="nav-btn prev">
+            <span class="nav-arrow">←</span>
+            <span class="nav-text">
+              <span class="nav-lbl">Quay lại</span>
+              <span class="nav-ttl">03 · Hiện trạng KH</span>
+            </span>
+          </a>
+          <a href="05-cach-thuc-hoat-dong.html" class="nav-btn next">
+            <span class="nav-arrow">→</span>
+            <span class="nav-text">
+              <span class="nav-lbl">Phần tiếp theo</span>
+              <span class="nav-ttl">05 · Cách thức hoạt động</span>
+            </span>
+          </a>
+        </nav>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <span>© 2025 NetNam Corporation — Tài liệu mang tính đề xuất, chỉ lưu hành nội bộ</span>
+    <span>SD-WAN Managed Services Proposal · v1.0</span>
+  </footer>
+
+  <script>
+    const sections = document.querySelectorAll('.anchor-target');
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

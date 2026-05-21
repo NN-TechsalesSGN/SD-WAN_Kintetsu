@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giới thiệu SD-WAN — NetNam SD-WAN Proposal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Component cards & value cards — stretch to equal height */
+    .cards-grid .component-card,
+    .cards-grid .value-card {
+      height: 100%;
+    }
+
+    /* ── Two-column (underlay / overlay) ── */
+    .two-col {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 16px; margin: 20px 0;
+    }
+    .two-col-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex; flex-direction: column;
+    }
+    .two-col-card.underlay { border-top: 3px solid var(--accent-orange); }
+    .two-col-card.overlay  { border-top: 3px solid var(--accent-cyan); }
+    .tc-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .underlay .tc-label { color: var(--accent-orange); }
+    .overlay  .tc-label { color: var(--accent-cyan); }
+    .tc-title {
+      font-size: 15px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .tc-desc {
+      font-size: 13.5px; color: var(--text-secondary); line-height: 1.72;
+    }
+
+    /* ── Architecture component cards ── */
+    .component-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .component-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .component-card.orchestrator { border-left: 4px solid var(--accent-cyan); }
+    .component-card.controller   { border-left: 4px solid var(--accent-purple); }
+    .component-card.edge         { border-left: 4px solid var(--accent-green); }
+    .comp-icon { font-size: 30px; margin-bottom: 12px; }
+    .comp-role {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .orchestrator .comp-role { color: var(--accent-cyan); }
+    .controller   .comp-role { color: var(--accent-purple); }
+    .edge         .comp-role { color: var(--accent-green); }
+    .comp-name {
+      font-size: 16px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+    }
+    .comp-desc {
+      font-size: 13.5px; color: var(--text-secondary); line-height: 1.72;
+    }
+
+    /* ── Feature group CARDS (2×2 grid) ── */
+    .feat-group-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .feat-group-card:hover {
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-sm);
+    }
+    .feat-group-card.g1 { border-top: 3px solid var(--accent-cyan); }
+    .feat-group-card.g2 { border-top: 3px solid var(--accent-orange); }
+    .feat-group-card.g3 { border-top: 3px solid var(--accent-gold); }
+    .feat-group-card.g4 { border-top: 3px solid var(--accent-purple); }
+
+    .fg-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .fg-icon { font-size: 20px; }
+    .fg-title {
+      font-size: 14px; font-weight: 700;
+    }
+    .g1 .fg-title { color: var(--accent-cyan); }
+    .g2 .fg-title { color: var(--accent-orange); }
+    .g3 .fg-title { color: var(--accent-gold); }
+    .g4 .fg-title { color: var(--accent-purple); }
+
+    /* ── Feature item list — label + desc stacked ── */
+    .fg-list { list-style: none; flex: 1; }
+    .fg-list li {
+      padding: 9px 10px 9px 12px;
+      border-left: 2px solid transparent;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+      transition: var(--transition);
+    }
+    .fg-list li:last-child { border-bottom: none; }
+    .fi-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+      line-height: 1.4;
+    }
+    .fi-desc {
+      font-size: 12.5px; color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Highlighted item — marked as top-5 */
+    .fg-list li.featured {
+      background: rgba(0,217,255,0.07);
+      border-left: 2px solid var(--accent-cyan);
+      border-bottom-color: rgba(0,217,255,0.12);
+      border-radius: 0 6px 6px 0;
+    }
+    .fg-list li.featured .fi-name {
+      color: var(--accent-cyan);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .fg-list li.featured .fi-name::after {
+      content: '★';
+      font-size: 10px;
+      opacity: 0.75;
+      flex-shrink: 0;
+    }
+
+    /* ── Value cards ── */
+    .value-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .value-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .value-card:nth-child(1)::before { background: var(--accent-cyan); }
+    .value-card:nth-child(2)::before { background: var(--accent-green); }
+    .value-card:nth-child(3)::before { background: var(--accent-orange); }
+    .value-card:nth-child(4)::before { background: var(--accent-purple); }
+    .value-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .value-card-icon { font-size: 26px; margin-bottom: 10px; }
+    .value-card h3 {
+      font-size: 15px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+    }
+    .value-card p {
+      font-size: 13.5px; color: var(--text-secondary); line-height: 1.72;
+    }
+
+    @media (max-width: 760px) {
+      .two-col, .hl-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">NN</div>
+      <span class="navbar-name">NetNam <span>SD-WAN</span></span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="index.html">Trang bìa</a></li>
+      <li><a href="01-gioi-thieu-sdwan.html" class="active">01 · Giới thiệu SD-WAN</a></li>
+      <li><a href="02-dich-vu-netnam.html">02 · Dịch vụ NetNam</a></li>
+      <li><a href="03-hien-trang-khach-hang.html">03 · Hiện trạng KH</a></li>
+      <li><a href="04-phuong-an-de-xuat.html">04 · Phương án đề xuất</a></li>
+      <li><a href="05-cach-thuc-hoat-dong.html">05 · Cách thức hoạt động</a></li>
+      <li><a href="06-giam-sat-tap-trung.html">06 · SD-WAN GUI trên FortiManager</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <header class="page-hero">
+    <div class="hero-badge">Phần 01 · Nền tảng công nghệ</div>
+    <h1>Giới thiệu <span style="color:var(--accent-cyan)">SD-WAN</span></h1>
+    <p class="hero-desc">
+      Các thành phần và tính năng phổ biến nhất của SD-WAN — nền tảng để hiểu giải pháp NetNam đề xuất.
+    </p>
+    <div class="ghost-number">01</div>
+  </header>
+
+  <!-- ══ CONTENT ══ -->
+  <main class="content">
+
+    <!-- ─── 1.1 SD-WAN là gì ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">1.1</div>
+        <h2>SD-WAN là gì?</h2>
+      </div>
+
+      <p class="prose">
+        <strong>SD-WAN (Software-Defined Wide Area Network)</strong> là mạng diện rộng được định nghĩa và điều khiển bằng phần mềm. Công nghệ này ra đời dựa trên nguyên lý cốt lõi là sự tách biệt lớp điều khiển (Control Plane) ra khỏi lớp dữ liệu (Data Plane).
+      </p>
+
+      <p class="prose">Để hiểu bản chất của SD-WAN, có thể chia nó thành 2 khía cạnh:</p>
+
+      <div class="two-col">
+        <div class="two-col-card underlay">
+          <div class="tc-label">Hạ tầng vật lý — Underlay</div>
+          <div class="tc-title">Transport-agnostic</div>
+          <div class="tc-desc">
+            SD-WAN hoàn toàn độc lập với công nghệ truyền dẫn. Nó không bắt buộc doanh nghiệp phải đập bỏ đường truyền cũ, mà có thể gộp chung mọi loại kết nối sẵn có như cáp quang băng thông rộng (FTTH), kênh thuê riêng (ILL/MPLS) hay mạng di động 4G/5G thành một tài nguyên mạng duy nhất.
+          </div>
+        </div>
+        <div class="two-col-card overlay">
+          <div class="tc-label">Phần mềm — Overlay</div>
+          <div class="tc-title">Điều phối thông minh</div>
+          <div class="tc-desc">
+            SD-WAN phủ một lớp mạng ảo lên trên các đường truyền vật lý. Thay vì định tuyến cứng nhắc và "mù mờ" bằng phần cứng của router truyền thống, SD-WAN sử dụng phần mềm tập trung để điều phối luồng dữ liệu một cách thông minh, chủ động nhận diện ứng dụng và đưa ra quyết định định tuyến theo thời gian thực.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 1.2 Các thành phần chính ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">1.2</div>
+        <h2>Các thành phần chính của mô hình SD-WAN</h2>
+      </div>
+
+      <p class="prose">
+        Một kiến trúc SD-WAN hiện đại thường được xây dựng dựa trên 3 thành phần nền tảng chính:
+      </p>
+
+      <div class="cards-grid cols-3">
+
+        <div class="component-card orchestrator">
+          <div class="comp-icon">🖥️</div>
+          <div class="comp-role">vManage — Bộ điều phối</div>
+          <div class="comp-name">SD-WAN Orchestrator</div>
+          <div class="comp-desc">
+            Cung cấp giao diện quản trị đồ họa (GUI) tập trung cho người quản trị. Từ màn hình này, đội ngũ IT có thể giám sát toàn cảnh hệ thống, thiết lập các chính sách kinh doanh, và tự động hóa việc triển khai cấu hình xuống các thiết bị biên mà không cần thao tác thủ công.
+          </div>
+        </div>
+
+        <div class="component-card controller">
+          <div class="comp-icon">🧠</div>
+          <div class="comp-role">vSmart — Bộ điều khiển</div>
+          <div class="comp-name">SD-WAN Controller</div>
+          <div class="comp-desc">
+            Đóng vai trò là "bộ não" của hệ thống (Control Plane). Nó thiết lập kết nối an toàn với tất cả các thiết bị Edge, phân phối các khóa mã hóa, chính sách định tuyến và quyết định đường đi tốt nhất cho lưu lượng mạng dựa trên trạng thái thời gian thực.
+          </div>
+        </div>
+
+        <div class="component-card edge">
+          <div class="comp-icon">🔀</div>
+          <div class="comp-role">vEdge — Thiết bị biên</div>
+          <div class="comp-name">SD-WAN Edge</div>
+          <div class="comp-desc">
+            Là các thiết bị phần cứng vật lý hoặc bộ định tuyến ảo hóa được đặt tại các chi nhánh, trung tâm dữ liệu hoặc trên nền tảng đám mây. Chức năng là chịu trách nhiệm chuyển tiếp lưu lượng thực tế (Data Plane), mã hóa dữ liệu và thực thi các chính sách mạng được đẩy xuống từ trung tâm.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 1.3 Các tính năng phổ biến ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">1.3</div>
+        <h2>Các tính năng phổ biến nhất của SD-WAN</h2>
+      </div>
+
+      <p class="prose">
+        Về mặt công nghệ, một hệ thống SD-WAN tiêu chuẩn có thể cung cấp nhiều nhóm tính năng kỹ thuật khác nhau. Các tính năng này thường được chia thành 4 nhóm chính:
+      </p>
+
+      <p class="prose" style="margin-bottom:6px; font-size:13px; color:var(--text-muted);">
+        <span style="color:var(--accent-cyan); font-weight:700;">★</span> — 5 tính năng thường tạo ra thay đổi dễ nhận thấy nhất trong thực tế triển khai.
+      </p>
+
+      <!-- 4 Nhóm tính năng dạng card 2×2 -->
+      <div class="cards-grid cols-2 feat-groups">
+
+        <!-- Nhóm 1: Định tuyến và điều hướng -->
+        <div class="feat-group-card g1">
+          <div class="fg-header">
+            <span class="fg-icon">🔀</span>
+            <span class="fg-title">Nhóm định tuyến và điều hướng</span>
+          </div>
+          <ul class="fg-list">
+            <li class="featured">
+              <div class="fi-name">Application-Aware Routing</div>
+              <div class="fi-desc">Nhận diện và định tuyến lưu lượng dựa trên ứng dụng ở Lớp 7 (Layer 7).</div>
+            </li>
+            <li class="featured">
+              <div class="fi-name">Dynamic Path Selection</div>
+              <div class="fi-desc">Tự động chọn đường dẫn phù hợp nhất theo thời gian thực dựa trên chất lượng đường truyền.</div>
+            </li>
+            <li>
+              <div class="fi-name">Local Internet Breakout</div>
+              <div class="fi-desc">Cho phép người dùng tại chi nhánh truy cập Internet trực tiếp tại chỗ thay vì phải kéo toàn bộ lưu lượng về Trụ sở hoặc Trung tâm dữ liệu.</div>
+            </li>
+            <li>
+              <div class="fi-name">Transport Independence</div>
+              <div class="fi-desc">Hỗ trợ kết hợp nhiều loại đường truyền khác nhau như MPLS, ILL, FTTH, Broadband hoặc 4G/5G trong cùng một mô hình WAN.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Nhóm 2: Hiệu năng -->
+        <div class="feat-group-card g2">
+          <div class="fg-header">
+            <span class="fg-icon">⚡</span>
+            <span class="fg-title">Nhóm tối ưu hiệu năng (Performance)</span>
+          </div>
+          <ul class="fg-list">
+            <li class="featured">
+              <div class="fi-name">Dynamic/Sub-second Failover</div>
+              <div class="fi-desc">Chuyển đổi dự phòng giữa các đường truyền trong thời gian rất ngắn, thường hướng tới mức dưới 1 giây tùy theo nền tảng và điều kiện triển khai.</div>
+            </li>
+            <li>
+              <div class="fi-name">Forward Error Correction (FEC) và Packet Duplication</div>
+              <div class="fi-desc">Hỗ trợ sửa lỗi mất gói tin hoặc nhân bản gói tin trên nhiều đường truyền nhằm giảm ảnh hưởng của packet loss, jitter đối với các ứng dụng nhạy cảm như thoại, video conference.</div>
+            </li>
+            <li>
+              <div class="fi-name">Quality of Service (QoS)</div>
+              <div class="fi-desc">Phân loại, đánh dấu và ưu tiên băng thông cho các ứng dụng hoặc nhóm lưu lượng quan trọng.</div>
+            </li>
+            <li>
+              <div class="fi-name">TCP / WAN Optimization</div>
+              <div class="fi-desc">Tối ưu hóa truyền tải TCP, nén dữ liệu hoặc giảm lưu lượng lặp lại nhằm cải thiện hiệu quả sử dụng mạng WAN trong một số trường hợp phù hợp.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Nhóm 3: Quản trị và vận hành -->
+        <div class="feat-group-card g3">
+          <div class="fg-header">
+            <span class="fg-icon">🖥️</span>
+            <span class="fg-title">Nhóm quản trị và vận hành</span>
+          </div>
+          <ul class="fg-list">
+            <li class="featured">
+              <div class="fi-name">Zero-Touch Provisioning (ZTP)</div>
+              <div class="fi-desc">Cho phép triển khai cấu hình thiết bị từ xa, giảm nhu cầu thao tác cấu hình trực tiếp tại chi nhánh.</div>
+            </li>
+            <li class="featured">
+              <div class="fi-name">Centralized Orchestration</div>
+              <div class="fi-desc">Cung cấp màn hình quản trị và giám sát tập trung cho toàn mạng (Single-pane-of-glass), giúp đội ngũ vận hành theo dõi trạng thái thiết bị, đường truyền và chính sách mạng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Analytics và MOS Reporting</div>
+              <div class="fi-desc">Phân tích lưu lượng, đo lường chất lượng dịch vụ, chất lượng cuộc gọi hoặc trải nghiệm ứng dụng thông qua các chỉ số như SLA, MOS, latency, jitter, packet loss.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Nhóm 4: Bảo mật và kết nối -->
+        <div class="feat-group-card g4">
+          <div class="fg-header">
+            <span class="fg-icon">🛡️</span>
+            <span class="fg-title">Nhóm bảo mật và kết nối</span>
+          </div>
+          <ul class="fg-list">
+            <li>
+              <div class="fi-name">Auto VPN (Dynamic IPsec)</div>
+              <div class="fi-desc">Tự động thiết lập các đường hầm mã hóa giữa các điểm kết nối, hỗ trợ kết nối bảo mật giữa Trụ sở, chi nhánh, Trung tâm dữ liệu hoặc Cloud.</div>
+            </li>
+            <li>
+              <div class="fi-name">Integrated Security (NGFW/UTM)</div>
+              <div class="fi-desc">Tích hợp các chức năng bảo mật như tường lửa, lọc web, chống mã độc hoặc kiểm soát ứng dụng tùy theo năng lực của nền tảng SD-WAN.</div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 1.4 Giá trị mang lại ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">1.4</div>
+        <h2>Giá trị SD-WAN mang lại cho doanh nghiệp</h2>
+      </div>
+
+      <div class="cards-grid cols-2">
+
+        <div class="value-card">
+          <div class="value-card-icon">💰</div>
+          <h3>Tối ưu hóa và kiểm soát chi phí (Cost Savings/OpEx)</h3>
+          <p>Doanh nghiệp có thể giảm sự phụ thuộc vào các kênh truyền riêng (MPLS/ILL) chi phí cao. Nhờ khả năng phân luồng của SD-WAN, doanh nghiệp có thể kết hợp các đường cáp quang băng thông rộng (FTTH/Broadband) với các đường truyền hiện hữu để sử dụng tài nguyên kết nối hiệu quả hơn.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-card-icon">🔄</div>
+          <h3>Duy trì hoạt động kinh doanh liên tục và cải thiện trải nghiệm người dùng</h3>
+          <p>Khả năng tự động chuyển đổi dự phòng (failover) giúp giảm ảnh hưởng của sự cố đường truyền tới các ứng dụng quan trọng như họp trực tuyến, phần mềm kế toán, hệ thống POS hoặc các ứng dụng vận hành tại chi nhánh. SD-WAN đặc biệt phù hợp với các doanh nghiệp đang chuyển dịch lên đám mây (Cloud/SaaS).</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-card-icon">🚀</div>
+          <h3>Giải phóng nguồn lực IT và dễ dàng mở rộng</h3>
+          <p>Việc mở thêm chi nhánh mới (Scale-up) trở nên cực kỳ nhanh chóng, từ vài tuần xuống chỉ còn tính bằng phút/giờ, nhờ tính năng ZTP. Đội ngũ IT nội bộ thoát khỏi các thao tác cấu hình thủ công (CLI) tốn thời gian và dễ sai sót.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-card-icon">🛡️</div>
+          <h3>Tăng cường an toàn thông tin toàn diện</h3>
+          <p>SD-WAN bảo vệ dữ liệu truyền tải trên Internet bằng mã hóa mạnh mẽ, quản lý an ninh nhất quán từ trung tâm, giúp các tổ chức chống lại các mối đe dọa mạng và sẵn sàng nâng cấp lên các kiến trúc bảo mật tương lai như SASE (Secure Access Service Edge) hay Zero Trust.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </main><!-- end .content -->
+
+  <!-- ══ PAGE NAVIGATION ══ -->
+  <nav class="page-nav">
+    <a href="index.html" class="nav-btn prev">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">
+        <span class="nav-lbl">Quay lại</span>
+        <span class="nav-ttl">Trang bìa</span>
+      </span>
+    </a>
+    <a href="02-dich-vu-netnam.html" class="nav-btn next">
+      <span class="nav-arrow">→</span>
+      <span class="nav-text">
+        <span class="nav-lbl">Phần tiếp theo</span>
+        <span class="nav-ttl">02 · Dịch vụ NetNam</span>
+      </span>
+    </a>
+  </nav>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <span>© 2025 NetNam Corporation — Tài liệu mang tính đề xuất, chỉ lưu hành nội bộ</span>
+    <span>SD-WAN Managed Services Proposal · v1.0</span>
+  </footer>
+
+</body>
+</html>

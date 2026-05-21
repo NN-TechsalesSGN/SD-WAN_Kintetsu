@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dịch vụ NetNam — NetNam SD-WAN Proposal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Page-02 specific styles ── */
+
+    /* All cards stretch to equal height per row */
+    .cards-grid .svc-card,
+    .cards-grid .benefit-card { height: 100%; }
+
+    /* ── Overview highlight box ── */
+    .overview-box {
+      background: rgba(0,217,255,0.05);
+      border: 1px solid rgba(0,217,255,0.2);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .overview-box p {
+      font-size: 14.5px; color: var(--text-secondary); line-height: 1.8;
+      margin-bottom: 10px;
+    }
+    .overview-box p:last-child { margin-bottom: 0; }
+    .overview-box strong { color: var(--text-primary); }
+
+    /* ── Service model cards (2.3) ── */
+    .svc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .svc-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .svc-card.c1 { border-top: 3px solid var(--accent-cyan); }
+    .svc-card.c2 { border-top: 3px solid var(--accent-purple); }
+    .svc-card.c3 { border-top: 3px solid var(--accent-orange); }
+    .svc-card.c4 { border-top: 3px solid var(--accent-green); }
+
+    .svc-card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 14px;
+    }
+    .svc-icon { font-size: 24px; flex-shrink: 0; }
+    .svc-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .c1 .svc-label { color: var(--accent-cyan); }
+    .c2 .svc-label { color: var(--accent-purple); }
+    .c3 .svc-label { color: var(--accent-orange); }
+    .c4 .svc-label { color: var(--accent-green); }
+
+    .svc-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 4px;
+    }
+    /* Stacked label + desc inside svc cards */
+    .svc-card .svc-list { list-style: none; flex: 1; }
+    .svc-card .svc-list li {
+      padding: 9px 10px 9px 12px;
+      border-left: 2px solid transparent;
+      border-bottom: 1px solid var(--border);
+    }
+    .svc-card .svc-list li:last-child { border-bottom: none; }
+    .svc-card .svc-list .fi-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px; line-height: 1.4;
+    }
+    .svc-card .svc-list .fi-desc {
+      font-size: 12.5px; color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ── Benefit cards (2.4) ── */
+    .benefit-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+      gap: 8px;
+    }
+    .benefit-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .benefit-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .benefit-card:nth-child(1)::before { background: var(--accent-cyan); }
+    .benefit-card:nth-child(2)::before { background: var(--accent-green); }
+    .benefit-card:nth-child(3)::before { background: var(--accent-purple); }
+    .benefit-card:nth-child(4)::before { background: var(--accent-orange); }
+    .benefit-card:nth-child(5)::before { background: var(--accent-gold); }
+    .benefit-card:nth-child(6)::before { background: var(--accent-cyan); }
+    .benefit-card:nth-child(7)::before { background: var(--accent-red); }
+    .benefit-card:nth-child(8)::before { background: var(--accent-green); }
+
+    .benefit-icon { font-size: 22px; }
+    .benefit-title {
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+      line-height: 1.4;
+    }
+    .benefit-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+    }
+
+    /* ── Scope list items ── */
+    .scope-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .scope-item:last-child { border-bottom: none; }
+    .scope-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent-cyan);
+      flex-shrink: 0; margin-top: 6px;
+    }
+    .scope-body { flex: 1; }
+    .scope-name {
+      font-size: 14px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 3px;
+    }
+    .scope-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.68;
+    }
+
+    /* ── Platform note ── */
+    .platform-note {
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-left: 4px solid var(--accent-purple);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 20px;
+      font-size: 13.5px; color: var(--text-secondary); line-height: 1.75;
+    }
+    .platform-note strong { color: var(--text-primary); }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">NN</div>
+      <span class="navbar-name">NetNam <span>SD-WAN</span></span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="index.html">Trang bìa</a></li>
+      <li><a href="01-gioi-thieu-sdwan.html">01 · Giới thiệu SD-WAN</a></li>
+      <li><a href="02-dich-vu-netnam.html" class="active">02 · Dịch vụ NetNam</a></li>
+      <li><a href="03-hien-trang-khach-hang.html">03 · Hiện trạng KH</a></li>
+      <li><a href="04-phuong-an-de-xuat.html">04 · Phương án đề xuất</a></li>
+      <li><a href="05-cach-thuc-hoat-dong.html">05 · Cách thức hoạt động</a></li>
+      <li><a href="06-giam-sat-tap-trung.html">06 · SD-WAN GUI trên FortiManager</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <header class="page-hero">
+    <div class="hero-badge">Phần 02 · Dịch vụ</div>
+    <h1>Dịch vụ <span style="color:var(--accent-cyan)">NetNam</span> SD-WAN</h1>
+    <p class="hero-desc">
+      Tổng quan NetNam SDWAN Managed Services — phạm vi vận hành, mô hình cung cấp và lợi ích khi sử dụng dịch vụ.
+    </p>
+    <div class="ghost-number">02</div>
+  </header>
+
+  <!-- ══ CONTENT ══ -->
+  <main class="content">
+
+    <!-- ─── 2.1 Tổng quan dịch vụ ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">2.1</div>
+        <h2>Tổng quan dịch vụ</h2>
+      </div>
+
+      <div class="overview-box">
+        <p>
+          <strong>NetNam SDWAN Managed Services</strong> là dịch vụ quản trị SD-WAN trọn gói trên nền tảng FortiGate, kết hợp giữa hạ tầng kết nối WAN, thiết bị SD-WAN Edge, bảo mật tích hợp, quản trị tập trung và vận hành liên tục.
+        </p>
+        <p>
+          Dịch vụ hướng tới các doanh nghiệp có nhiều địa điểm như Head Office, chi nhánh, nhà máy, kho vận hoặc môi trường Cloud, cần một mô hình kết nối ổn định, dễ mở rộng và được giám sát thường xuyên. Thay vì khách hàng tự quản lý từng đường truyền, từng thiết bị và từng cấu hình VPN riêng lẻ, <strong>NetNam đóng vai trò là đơn vị thiết kế, triển khai, giám sát và vận hành</strong> hệ thống SD-WAN theo mô hình dịch vụ.
+        </p>
+      </div>
+
+      <p class="prose">
+        Nền tảng triển khai chính là <strong>FortiGate</strong>, đóng vai trò SD-WAN Edge, Security Gateway, NGFW, IPS và VPN Gateway tại các site. Bên cạnh FortiGate, dịch vụ có thể được triển khai cùng <strong>FortiManager</strong> và <strong>FortiAnalyzer</strong> để hoàn thiện lớp quản trị, giám sát và báo cáo tập trung.
+      </p>
+
+      <div class="platform-note">
+        <strong>FortiManager</strong> được sử dụng để quản lý cấu hình, policy, object, firmware, phân quyền và thay đổi trên toàn bộ hệ thống FortiGate. <strong>FortiAnalyzer</strong> đảm nhiệm việc thu thập log, phân tích sự kiện, lập báo cáo vận hành/bảo mật và hỗ trợ điều tra khi có sự cố. Về hình thức triển khai, FortiManager và FortiAnalyzer đều có thể được cung cấp dưới dạng <strong>hardware appliance</strong> hoặc <strong>virtual machine</strong>, tùy theo yêu cầu kỹ thuật, quy mô hệ thống và mô hình hạ tầng của khách hàng.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 2.2 Phạm vi quản lý và vận hành ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">2.2</div>
+        <h2>Phạm vi NetNam quản lý và vận hành</h2>
+      </div>
+
+      <p class="prose">
+        Phạm vi dịch vụ của NetNam có thể bao gồm các nhóm công việc chính sau:
+      </p>
+
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Khảo sát và thiết kế kiến trúc WAN</div>
+          <div class="scope-desc">Đánh giá hiện trạng topology mạng, đường truyền Internet/WAN, VPN, routing policy, thiết bị FortiGate hiện hữu và nhu cầu kết nối giữa các site.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Cung cấp hoặc tích hợp thiết bị FortiGate Edge</div>
+          <div class="scope-desc">NetNam có thể cung cấp thiết bị FortiGate phù hợp với quy mô từng site hoặc tận dụng thiết bị FortiGate hiện hữu của khách hàng nếu đáp ứng yêu cầu kỹ thuật.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Thiết kế hạ tầng WAN đa đường truyền</div>
+          <div class="scope-desc">Mỗi site có thể được thiết kế với tối thiểu 2 đường truyền Internet từ các ISP khác nhau nhằm tăng tính sẵn sàng và hỗ trợ failover.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Triển khai FortiManager</div>
+          <div class="scope-desc">Thiết lập nền tảng quản trị tập trung để quản lý policy package, object database, firmware, phân quyền quản trị và thay đổi cấu hình trên các FortiGate.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Triển khai FortiAnalyzer</div>
+          <div class="scope-desc">Thiết lập nền tảng thu thập log, phân tích sự kiện, lưu trữ dữ liệu vận hành/bảo mật và tạo báo cáo định kỳ.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Cấu hình SD-WAN, VPN và Local Breakout</div>
+          <div class="scope-desc">Thiết lập SD-WAN rules, SLA probe, IPsec VPN tunnel, ADVPN nếu phù hợp, và chính sách truy cập Internet trực tiếp tại chi nhánh.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Quản trị tập trung hệ thống FortiGate</div>
+          <div class="scope-desc">Onboard các FortiGate lên FortiManager, chuẩn hóa policy package, object database, firmware và phân quyền quản trị theo mô hình phù hợp.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Giám sát và phân tích tập trung</div>
+          <div class="scope-desc">Thu thập log và dữ liệu từ FortiGate về FortiAnalyzer để phục vụ giám sát, phân tích lưu lượng, sự kiện bảo mật, SLA và điều tra sự cố.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Vận hành NOC 24/7/365</div>
+          <div class="scope-desc">Giám sát trạng thái WAN link, VPN tunnel, chất lượng đường truyền, sự cố ISP và phối hợp xử lý khi phát sinh bất thường.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Vận hành bảo mật</div>
+          <div class="scope-desc">Duy trì các chức năng bảo mật như IPS, SSL Inspection, VPN client-to-site, FortiToken MFA, cập nhật signature và firmware theo kế hoạch.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Quản lý thay đổi</div>
+          <div class="scope-desc">Các thay đổi cấu hình được thực hiện theo quy trình RFC, có kiểm tra, peer-review và phương án rollback để giảm rủi ro ảnh hưởng hệ thống production.</div>
+        </div>
+      </div>
+      <div class="scope-item">
+        <div class="scope-dot"></div>
+        <div class="scope-body">
+          <div class="scope-name">Báo cáo định kỳ</div>
+          <div class="scope-desc">Cung cấp báo cáo hàng tháng về KPI SD-WAN, uptime, latency, failover, tunnel stability và báo cáo hàng quý về các sự kiện bảo mật, IPS, SSL Inspection hoặc security audit.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 2.3 Mô hình cung cấp dịch vụ ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">2.3</div>
+        <h2>Mô hình cung cấp dịch vụ SD-WAN As a Service</h2>
+      </div>
+
+      <p class="prose">
+        Dịch vụ NetNam SDWAN Managed Services được cung cấp theo mô hình <strong>SD-WAN As a Service</strong>, trong đó NetNam có thể đảm nhận nhiều lớp thành phần khác nhau, từ đường truyền, thiết bị/phần mềm Fortinet, cấu hình kỹ thuật, vận hành cấu hình đến giám sát dịch vụ.
+      </p>
+
+      <div class="cards-grid cols-2">
+
+        <!-- 2.3.1 Đường truyền -->
+        <div class="svc-card c1">
+          <div class="svc-card-header">
+            <span class="svc-icon">🌐</span>
+            <div>
+              <div class="svc-label">2.3.1 · Hạ tầng kết nối</div>
+              <div class="svc-title">Đường truyền</div>
+            </div>
+          </div>
+          <ul class="svc-list">
+            <li>
+              <div class="fi-name">Đường truyền Internet/WAN tại Head Office và chi nhánh</div>
+              <div class="fi-desc">Cung cấp hoặc tích hợp các đường truyền Internet, ILL, MPLS, FTTH/Broadband hoặc các loại kết nối phù hợp khác.</div>
+            </li>
+            <li>
+              <div class="fi-name">Mô hình dual-ISP hoặc multi-ISP</div>
+              <div class="fi-desc">Thiết kế mỗi site sử dụng từ 2 đường truyền trở lên, ưu tiên các ISP độc lập để tăng tính sẵn sàng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Phối hợp triển khai với ISP</div>
+              <div class="fi-desc">NetNam có thể đóng vai trò đầu mối làm việc với ISP trong quá trình khảo sát, lắp đặt, nghiệm thu và xử lý sự cố đường truyền.</div>
+            </li>
+            <li>
+              <div class="fi-name">Theo dõi chất lượng đường truyền</div>
+              <div class="fi-desc">Các thông số như uptime, latency, jitter, packet loss và trạng thái link có thể được đưa vào hệ thống giám sát và báo cáo định kỳ.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2.3.2 Thiết bị/phần mềm -->
+        <div class="svc-card c2">
+          <div class="svc-card-header">
+            <span class="svc-icon">🛡️</span>
+            <div>
+              <div class="svc-label">2.3.2 · Nền tảng Fortinet</div>
+              <div class="svc-title">Thiết bị / Phần mềm FortiGate</div>
+            </div>
+          </div>
+          <ul class="svc-list">
+            <li>
+              <div class="fi-name">FortiGate SD-WAN Edge</div>
+              <div class="fi-desc">Thiết bị đặt tại Head Office, chi nhánh, nhà máy, kho hoặc Cloud/DC, đảm nhiệm vai trò SD-WAN Edge, Security Gateway, NGFW, IPS và VPN Gateway.</div>
+            </li>
+            <li>
+              <div class="fi-name">FortiGate vật lý hoặc FortiGate-VM</div>
+              <div class="fi-desc">Tùy theo mô hình triển khai, FortiGate có thể là thiết bị phần cứng tại site hoặc máy ảo trên môi trường ảo hóa/Cloud.</div>
+            </li>
+            <li>
+              <div class="fi-name">FortiManager</div>
+              <div class="fi-desc">Nền tảng quản trị tập trung để quản lý cấu hình, policy package, object database, firmware, phân quyền và thay đổi. Có thể triển khai dưới dạng hardware appliance hoặc virtual machine.</div>
+            </li>
+            <li>
+              <div class="fi-name">FortiAnalyzer</div>
+              <div class="fi-desc">Nền tảng thu thập log, phân tích sự kiện, hỗ trợ báo cáo vận hành, báo cáo bảo mật và điều tra sự cố. Có thể triển khai dưới dạng hardware appliance hoặc virtual machine.</div>
+            </li>
+            <li>
+              <div class="fi-name">Tận dụng thiết bị hiện hữu</div>
+              <div class="fi-desc">Nếu khách hàng đã có FortiGate phù hợp, NetNam có thể đánh giá khả năng đáp ứng và tích hợp vào mô hình SD-WAN Managed Services.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2.3.3 Cấu hình và vận hành -->
+        <div class="svc-card c3">
+          <div class="svc-card-header">
+            <span class="svc-icon">⚙️</span>
+            <div>
+              <div class="svc-label">2.3.3 · Triển khai</div>
+              <div class="svc-title">Cấu hình và vận hành cấu hình</div>
+            </div>
+          </div>
+          <ul class="svc-list">
+            <li>
+              <div class="fi-name">Khảo sát và thiết kế cấu hình</div>
+              <div class="fi-desc">Đánh giá topology, IP planning, routing, VPN, policy hiện hữu và xây dựng thiết kế cấu hình phù hợp với mô hình vận hành của khách hàng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cấu hình SD-WAN rules</div>
+              <div class="fi-desc">Thiết lập chính sách điều hướng lưu lượng theo ứng dụng, địa chỉ đích, dịch vụ, chất lượng đường truyền hoặc yêu cầu nghiệp vụ.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cấu hình Performance SLA/SLA Probe</div>
+              <div class="fi-desc">Thiết lập cơ chế đo latency, jitter, packet loss và trạng thái đường truyền để phục vụ quyết định điều hướng lưu lượng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cấu hình VPN/ADVPN</div>
+              <div class="fi-desc">Thiết lập IPsec VPN site-to-site, mô hình Hub-and-Spoke hoặc ADVPN nếu phù hợp với kiến trúc của khách hàng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cấu hình Local Internet Breakout</div>
+              <div class="fi-desc">Thiết lập chính sách cho phép chi nhánh truy cập Internet/SaaS trực tiếp tại site trong khi vẫn đảm bảo yêu cầu bảo mật.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cấu hình bảo mật trên FortiGate</div>
+              <div class="fi-desc">Thiết lập hoặc tích hợp các chính sách NGFW, IPS, SSL Inspection, Web Filtering, Application Control, VPN client-to-site hoặc FortiToken MFA tùy theo phạm vi dịch vụ.</div>
+            </li>
+            <li>
+              <div class="fi-name">Chuẩn hóa cấu hình qua FortiManager</div>
+              <div class="fi-desc">Quản lý policy package, object database, firmware và phân quyền tập trung cho nhiều FortiGate.</div>
+            </li>
+            <li>
+              <div class="fi-name">Quản lý thay đổi cấu hình</div>
+              <div class="fi-desc">Thực hiện thay đổi theo quy trình RFC, có đánh giá tác động, peer-review, kế hoạch triển khai và phương án rollback.</div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2.3.4 Monitor -->
+        <div class="svc-card c4">
+          <div class="svc-card-header">
+            <span class="svc-icon">📊</span>
+            <div>
+              <div class="svc-label">2.3.4 · Vận hành liên tục</div>
+              <div class="svc-title">Dịch vụ Monitor</div>
+            </div>
+          </div>
+          <ul class="svc-list">
+            <li>
+              <div class="fi-name">Giám sát trạng thái đường truyền</div>
+              <div class="fi-desc">Theo dõi uptime, trạng thái ISP link, latency, jitter, packet loss và sự kiện failover tại từng site.</div>
+            </li>
+            <li>
+              <div class="fi-name">Giám sát thiết bị FortiGate</div>
+              <div class="fi-desc">Theo dõi trạng thái thiết bị, tài nguyên hệ thống, tunnel VPN, interface, firmware và các cảnh báo vận hành.</div>
+            </li>
+            <li>
+              <div class="fi-name">Giám sát SD-WAN SLA</div>
+              <div class="fi-desc">Theo dõi SLA probe, chất lượng từng đường truyền và trạng thái áp dụng policy điều hướng lưu lượng.</div>
+            </li>
+            <li>
+              <div class="fi-name">Giám sát log và sự kiện qua FortiAnalyzer</div>
+              <div class="fi-desc">Thu thập và phân tích log phục vụ theo dõi lưu lượng, sự kiện bảo mật, cảnh báo bất thường và điều tra sự cố.</div>
+            </li>
+            <li>
+              <div class="fi-name">Giám sát bảo mật</div>
+              <div class="fi-desc">Theo dõi các sự kiện liên quan đến IPS, malware, SSL Inspection, Web Filtering, Application Control hoặc VPN user tùy theo phạm vi cấu hình.</div>
+            </li>
+            <li>
+              <div class="fi-name">Cảnh báo và phối hợp xử lý sự cố</div>
+              <div class="fi-desc">Khi phát hiện bất thường, NetNam có thể tiếp nhận, phân loại, thông báo, phối hợp ISP hoặc xử lý theo quy trình hỗ trợ đã thống nhất.</div>
+            </li>
+            <li>
+              <div class="fi-name">Báo cáo định kỳ</div>
+              <div class="fi-desc">Cung cấp báo cáo về uptime, latency, jitter, packet loss, failover, tunnel stability, lưu lượng, sự kiện bảo mật và các khuyến nghị vận hành nếu cần.</div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── 2.4 Lợi ích ─── -->
+    <div class="section-block">
+      <div class="section-heading">
+        <div class="section-num">2.4</div>
+        <h2>Lợi ích khi sử dụng dịch vụ NetNam SDWAN Managed Services</h2>
+      </div>
+
+      <div class="cards-grid cols-2">
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🔗</div>
+          <div class="benefit-title">Tăng tính sẵn sàng của kết nối WAN</div>
+          <div class="benefit-desc">Mô hình dual-ISP và SD-WAN failover giúp giảm rủi ro gián đoạn khi một đường truyền gặp sự cố hoặc suy giảm chất lượng.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🖥️</div>
+          <div class="benefit-title">Đơn giản hóa vận hành đa chi nhánh</div>
+          <div class="benefit-desc">FortiManager giúp quản trị nhiều FortiGate từ một điểm tập trung, giảm thao tác thủ công trên từng thiết bị riêng lẻ.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">📊</div>
+          <div class="benefit-title">Tăng khả năng giám sát và minh bạch vận hành</div>
+          <div class="benefit-desc">FortiAnalyzer giúp tập trung log, phân tích sự kiện và tạo báo cáo định kỳ về chất lượng kết nối, lưu lượng, sự kiện bảo mật và tình trạng hệ thống.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">☁️</div>
+          <div class="benefit-title">Tối ưu truy cập Cloud/SaaS</div>
+          <div class="benefit-desc">Local Internet Breakout giúp chi nhánh truy cập trực tiếp các ứng dụng Cloud/SaaS, giảm tải cho Head Office và có thể cải thiện độ trễ trong các tình huống phù hợp.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">♻️</div>
+          <div class="benefit-title">Tận dụng hạ tầng FortiGate hiện hữu</div>
+          <div class="benefit-desc">Nếu khách hàng đã có FortiGate phù hợp, NetNam có thể tích hợp vào mô hình SD-WAN thay vì yêu cầu thay mới toàn bộ hạ tầng.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🛡️</div>
+          <div class="benefit-title">Kết hợp SD-WAN và bảo mật trên cùng nền tảng</div>
+          <div class="benefit-desc">FortiGate cho phép tích hợp SD-WAN với NGFW, IPS, SSL Inspection, VPN và FortiToken MFA, giúp chính sách kết nối và bảo mật được quản lý nhất quán hơn.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">🚀</div>
+          <div class="benefit-title">Giảm tải cho đội ngũ IT nội bộ</div>
+          <div class="benefit-desc">NetNam đảm nhận giám sát, xử lý sự cố, phối hợp ISP, quản lý thay đổi và báo cáo định kỳ, giúp đội IT khách hàng tập trung nhiều hơn vào hệ thống nghiệp vụ.</div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">📋</div>
+          <div class="benefit-title">Minh bạch chất lượng dịch vụ</div>
+          <div class="benefit-desc">Báo cáo định kỳ về uptime, latency, failover, tunnel stability, lưu lượng và sự kiện bảo mật giúp khách hàng theo dõi hiệu quả vận hành bằng số liệu cụ thể.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══ PAGE NAVIGATION ══ -->
+  <nav class="page-nav">
+    <a href="01-gioi-thieu-sdwan.html" class="nav-btn prev">
+      <span class="nav-arrow">←</span>
+      <span class="nav-text">
+        <span class="nav-lbl">Quay lại</span>
+        <span class="nav-ttl">01 · Giới thiệu SD-WAN</span>
+      </span>
+    </a>
+    <a href="03-hien-trang-khach-hang.html" class="nav-btn next">
+      <span class="nav-arrow">→</span>
+      <span class="nav-text">
+        <span class="nav-lbl">Phần tiếp theo</span>
+        <span class="nav-ttl">03 · Hiện trạng Khách hàng</span>
+      </span>
+    </a>
+  </nav>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <span>© 2025 NetNam Corporation — Tài liệu mang tính đề xuất, chỉ lưu hành nội bộ</span>
+    <span>SD-WAN Managed Services Proposal · v1.0</span>
+  </footer>
+
+</body>
+</html>
