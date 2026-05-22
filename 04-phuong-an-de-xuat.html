@@ -70,8 +70,7 @@
     .proposal-main {
       padding: 40px 48px 72px;
       max-width: 900px;
-      width: 100%;
-      justify-self: center;
+      margin: 0 auto;
     }
 
     /* Section anchor offset */
@@ -82,11 +81,13 @@
       font-size: 11px; font-weight: 700;
       letter-spacing: 2px; text-transform: uppercase;
       color: var(--accent-cyan); margin-bottom: 8px;
+      text-align: center;
     }
     .section-title {
       font-size: 24px; font-weight: 800;
       color: var(--text-primary);
       margin-bottom: 20px; line-height: 1.3;
+      text-align: center;
     }
 
     /* ── Principle cards 4-column grid (4.1) ── */
@@ -121,7 +122,7 @@
       line-height: 1.65; flex: 1;
     }
 
-    /* ── HLD Diagram placeholders (4.2) ── */
+    /* ── HLD Diagram (4.2) ── */
     .hld-section {
       margin-top: 20px;
       border: 1px solid var(--border);
@@ -129,12 +130,14 @@
       border-radius: var(--radius);
       overflow: hidden;
     }
+    .hld-section.proposed { border-top-color: var(--accent-green); }
     .hld-header {
       padding: 14px 20px;
       background: rgba(0,217,255,0.04);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
     }
+    .hld-section.proposed .hld-header { background: rgba(0,217,150,0.04); }
     .hld-header-icon { font-size: 18px; }
     .hld-label {
       font-size: 14px; font-weight: 700; color: var(--text-primary);
@@ -143,18 +146,66 @@
       font-size: 12px; color: var(--text-muted); margin-top: 2px;
     }
     .hld-body { padding: 16px; }
-    .hld-placeholder {
-      min-height: 240px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px;
-      border: 2px dashed rgba(255,255,255,0.1);
+    /* ── HLD image (clickable) ── */
+    .hld-img-wrap {
+      position: relative;
+      cursor: zoom-in;
       border-radius: 8px;
-      background: rgba(255,255,255,0.015);
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
     }
-    .hld-icon { font-size: 40px; opacity: 0.25; }
-    .hld-note {
-      font-size: 13px; color: var(--text-muted); font-style: italic;
+    .hld-img-wrap:hover { border-color: var(--accent-cyan); }
+    .hld-section.proposed .hld-img-wrap:hover { border-color: var(--accent-green); }
+    .hld-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .hld-img-hint {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,0.65);
+      color: rgba(255,255,255,0.7);
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .hld-img-wrap:hover .hld-img-hint { opacity: 1; }
+
+    /* ── Lightbox ── */
+    .lb-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.88);
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .lb-overlay.open { display: flex; }
+    .lb-inner {
+      position: relative;
+      max-width: min(92vw, 1200px);
+      max-height: 90vh;
+    }
+    .lb-inner img {
+      display: block; width: 100%; height: auto;
+      max-height: 85vh; object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    }
+    .lb-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-primary); font-size: 18px; line-height: 32px;
+      text-align: center; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.12); }
+    .lb-caption {
+      text-align: center; margin-top: 12px;
+      font-size: 13px; color: var(--text-muted);
     }
 
     /* ── Site spec cards (4.2) ── */
@@ -437,24 +488,24 @@
     .bom-cat-row.g1:first-child td { border-top: none; }
 
     /* Item rows */
-    .bom-table tbody tr.bom-item {
+    .bom-table tbody tr:not(.bom-cat-row) {
       border-bottom: 1px solid rgba(255,255,255,0.04);
       transition: background 0.15s;
     }
-    .bom-table tbody tr.bom-item:hover { background: rgba(255,255,255,0.025); }
-    .bom-table tbody tr.bom-item td {
-      padding: 10px 14px;
+    .bom-table tbody tr:not(.bom-cat-row):hover { background: rgba(255,255,255,0.025); }
+    .bom-table tbody tr:not(.bom-cat-row) td {
+      padding: 13px 14px;
       color: var(--text-secondary);
-      vertical-align: top;
-      line-height: 1.55;
+      vertical-align: middle;
+      line-height: 1.6;
     }
-    .bom-table tbody tr.bom-item td:first-child {
+    .bom-table tbody tr:not(.bom-cat-row) td:first-child {
       text-align: center;
       color: var(--text-muted);
       font-size: 11px; font-weight: 700;
     }
-    .bom-item-name { color: var(--text-primary); font-weight: 600; }
-    .bom-item-note { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+    .bom-item-name { color: var(--text-primary); font-weight: 600; display: block; }
+    .bom-item-note { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; display: block; }
 
     /* Badges */
     .badge-capex, .badge-opex {
@@ -815,31 +866,31 @@
           <div class="hld-header">
             <span class="hld-header-icon">🗂️</span>
             <div>
-              <div class="hld-label">HLD Diagram hiện tại</div>
-              <div class="hld-sub">Sơ đồ kiến trúc mạng hiện tại của khách hàng</div>
+              <div class="hld-label">Mô hình kiến trúc hiện tại (As-Is)</div>
+              <div class="hld-sub">Sơ đồ HLD kiến trúc mạng hiện tại của khách hàng</div>
             </div>
           </div>
           <div class="hld-body">
-            <div class="hld-placeholder">
-              <div class="hld-icon">🖼️</div>
-              <div class="hld-note">Hình ảnh HLD hiện tại sẽ được bổ sung sau</div>
+            <div class="hld-img-wrap" data-lb-src="example-images/diagram/hld-hien-huu.png" data-lb-cap="Mô hình kiến trúc mạng hiện tại (As-Is)">
+              <img src="example-images/diagram/hld-hien-huu.png" alt="HLD kiến trúc hiện tại">
+              <span class="hld-img-hint">🔍 Phóng to</span>
             </div>
           </div>
         </div>
 
         <!-- HLD Diagram đề xuất -->
-        <div class="hld-section">
+        <div class="hld-section proposed">
           <div class="hld-header">
             <span class="hld-header-icon">📐</span>
             <div>
-              <div class="hld-label">HLD Diagram đề xuất</div>
-              <div class="hld-sub">Sơ đồ kiến trúc SD-WAN NetNam đề xuất cho khách hàng</div>
+              <div class="hld-label">Mô hình kiến trúc đề xuất (To-Be)</div>
+              <div class="hld-sub">Sơ đồ HLD kiến trúc SD-WAN NetNam đề xuất cho khách hàng</div>
             </div>
           </div>
           <div class="hld-body">
-            <div class="hld-placeholder">
-              <div class="hld-icon">🖼️</div>
-              <div class="hld-note">Hình ảnh HLD đề xuất sẽ được bổ sung sau</div>
+            <div class="hld-img-wrap" data-lb-src="example-images/diagram/hld-de-xuat.png" data-lb-cap="Mô hình kiến trúc SD-WAN đề xuất (To-Be)">
+              <img src="example-images/diagram/hld-de-xuat.png" alt="HLD kiến trúc SD-WAN đề xuất">
+              <span class="hld-img-hint">🔍 Phóng to</span>
             </div>
           </div>
         </div>
@@ -1021,16 +1072,16 @@
                 <li>Xác nhận số lượng site, user, băng thông hiện hữu, sơ đồ kết nối, routing, VPN và yêu cầu bảo mật.</li>
                 <li>Đánh giá hiện trạng ILL/FTTx tại Hà Nội, TP. Hồ Chí Minh và các site tỉnh.</li>
                 <li>Xác định nhu cầu bổ sung hoặc điều chỉnh đường truyền tại từng site.</li>
-                <li>Làm rõ phương án NetNam cung cấp trực tiếp hoặc resell các line Internet theo từng địa điểm.</li>
+                <li>Làm rõ phương án NetNam cung cấp trực tiếp hoặc resell các line Internet theo từng địa điểm.</l                <li>Làm rõ phương án NetNam cung cấp trực tiếp hoặc resell các line Internet theo từng địa điểm.</li>
               </ul>
             </div>
 
             <div class="rh-card s2">
               <ul class="rh-items">
-                <li>Chốt model FortiGate phù hợp cho từng nhóm site.</li>
+                <li>Chốt model FortiGate phù hợp cho từng nhóm site (hub và branch).</li>
                 <li>Chốt mô hình FortiManager, FortiAnalyzer nếu cần.</li>
-                <li>Thiết kế SD-WAN zone, ADVPN, dual-hub, Local Internet Breakout và security policy.</li>
-                <li>Thiết kế phương án đường truyền đảm bảo mỗi site có tối thiểu 2 ISP nếu khách hàng chọn mô hình one-stop-shop.</li>
+                <li>Thiết kế SD-WAN zone, ADVPN, dual-hub, Local Internet Breakout, security policy và monitoring.</li>
+                <li>Thiết kế phương án đường truyền bảo đảm mỗi site có tối thiểu 2 ISP nếu khách hàng lựa chọn mô hình one-stop-shop.</li>
               </ul>
             </div>
 
@@ -1038,242 +1089,192 @@
               <ul class="rh-items">
                 <li>Triển khai trước tại một số site đại diện.</li>
                 <li>Kiểm thử failover, truy cập Microsoft 365, kết nối nội bộ, ADVPN và chính sách bảo mật.</li>
-                <li>Ghi nhận kết quả và tinh chỉnh thiết kế.</li>
+                <li>Ghi nhận kết quả và tinh chỉnh thiết kế trước khi triển khai diện rộng.</li>
               </ul>
             </div>
 
             <div class="rh-card s4">
               <ul class="rh-items">
                 <li>Triển khai cho Hà Nội, TP. Hồ Chí Minh và các site nhánh theo kế hoạch.</li>
-                <li>Onboard thiết bị vào hệ thống quản trị tập trung.</li>
-                <li>Kiểm thử kết nối, chính sách và giám sát sau triển khai.</li>
+                <li>Onboard thiết bị vào hệ thống quản trị tập trung (FortiManager).</li>
+                <li>Kiểm thử kết nối, chính sách và giám sát sau triển khai tại từng site.</li>
               </ul>
             </div>
 
             <div class="rh-card s5">
               <ul class="rh-items">
                 <li>Bàn giao tài liệu cấu hình, sơ đồ kết nối, quy trình vận hành và kênh hỗ trợ.</li>
-                <li>Thiết lập báo cáo định kỳ.</li>
+                <li>Thiết lập báo cáo định kỳ theo cam kết dịch vụ.</li>
                 <li>Chuyển sang giai đoạn vận hành, monitor và support theo phạm vi dịch vụ thống nhất.</li>
               </ul>
             </div>
 
           </div>
         </div>
+
       </section>
 
-      <!-- ─── 4.6 Danh mục dịch vụ ─── -->
       <div class="main-divider"></div>
 
+      <!-- ─── 4.6 Danh mục dịch vụ ─── -->
       <section id="s46" class="anchor-target">
         <p class="section-eyebrow">Mục 4.6 — Danh mục dịch vụ</p>
         <h2 class="section-title">Danh mục dịch vụ và hình thức cung cấp</h2>
 
         <p class="prose">
-          Dưới đây là danh mục các hạng mục NetNam cung cấp trong khuôn khổ dịch vụ SD-WAN Managed Services, phân theo nhóm thiết bị/phần mềm, đường truyền, triển khai và vận hành — cùng hình thức thanh toán tương ứng.
+          Bảng dưới đây tóm tắt các hạng mục NetNam có thể cung cấp trong khuôn khổ dịch vụ SD-WAN Managed Services, kèm đơn vị tính và hình thức thanh toán tham khảo.
         </p>
 
         <div class="bom-wrap">
           <table class="bom-table">
             <thead>
               <tr>
-                <th>STT</th>
+                <th style="width:44px">STT</th>
                 <th>Danh mục dịch vụ / Hạng mục</th>
                 <th>Ghi chú / Phân loại</th>
-                <th>Hình thức</th>
-                <th>Đơn vị</th>
+                <th style="width:110px">Hình thức</th>
+                <th style="width:130px">Đơn vị</th>
               </tr>
             </thead>
             <tbody>
 
-              <!-- Group 1: Thiết bị & Phần mềm -->
+              <!-- Nhóm 1 -->
               <tr class="bom-cat-row g1">
-                <td colspan="5">🖥 Nhóm 1 — Thiết bị &amp; Phần mềm</td>
+                <td colspan="5">Nhóm 1 — Thiết bị &amp; Phần mềm</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>1</td>
-                <td>
-                  <div class="bom-item-name">FortiGate — Site loại Hub (Trung tâm)</div>
-                  <div class="bom-item-note">Hà Nội, TP. HCM — FortiGate phân khúc mid-range</div>
-                </td>
-                <td>Per site</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Site</td>
+                <td><span class="bom-item-name">FortiGate — Hub site</span></td>
+                <td class="bom-item-note">Thiết bị SD-WAN cho Hà Nội và TP. Hồ Chí Minh</td>
+                <td><span class="badge badge-capex">Capex</span><br><span style="font-size:10px;color:var(--text-muted)">hoặc</span><br><span class="badge badge-opex">Opex</span></td>
+                <td>1 thiết bị / site</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>2</td>
-                <td>
-                  <div class="bom-item-name">FortiGate — Site loại Branch (Chi nhánh)</div>
-                  <div class="bom-item-note">Site tỉnh — FortiGate phân khúc entry/small-branch</div>
-                </td>
-                <td>Per site</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Site</td>
+                <td><span class="bom-item-name">FortiGate — Branch site</span></td>
+                <td class="bom-item-note">Thiết bị SD-WAN cho các site nhánh tại tỉnh</td>
+                <td><span class="badge badge-capex">Capex</span><br><span style="font-size:10px;color:var(--text-muted)">hoặc</span><br><span class="badge badge-opex">Opex</span></td>
+                <td>1 thiết bị / site</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>3</td>
-                <td>
-                  <div class="bom-item-name">FortiManager — Hệ thống quản trị tập trung</div>
-                  <div class="bom-item-note">License theo số lượng device, VM hoặc appliance</div>
-                </td>
-                <td>Toàn hệ thống</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Hệ thống</td>
+                <td><span class="bom-item-name">FortiManager</span></td>
+                <td class="bom-item-note">Nền tảng quản trị tập trung — cloud-based hoặc VM</td>
+                <td><span class="badge badge-opex">Opex</span><span style="display:inline-block;margin:2px 0;font-size:10px;color:var(--text-muted)"> (cloud)</span><br><span class="badge badge-capex">Capex</span><span style="font-size:10px;color:var(--text-muted)"> (VM)</span></td>
+                <td>1 instance</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>4</td>
-                <td>
-                  <div class="bom-item-name">FortiAnalyzer — Hệ thống phân tích &amp; log tập trung</div>
-                  <div class="bom-item-note">License theo GB/day log, VM hoặc appliance</div>
-                </td>
-                <td>Toàn hệ thống</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span><br><span style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block">hoặc</span><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Hệ thống</td>
+                <td><span class="bom-item-name">FortiAnalyzer</span></td>
+                <td class="bom-item-note">Giám sát log, phân tích và báo cáo bảo mật (nếu có yêu cầu)</td>
+                <td><span class="badge badge-capex">Capex</span><br><span style="font-size:10px;color:var(--text-muted)">hoặc</span><br><span class="badge badge-opex">Opex</span></td>
+                <td>1 instance</td>
               </tr>
 
-              <!-- Group 2: Đường truyền Internet -->
+              <!-- Nhóm 2 -->
               <tr class="bom-cat-row g2">
-                <td colspan="5">🌐 Nhóm 2 — Đường truyền Internet</td>
+                <td colspan="5">Nhóm 2 — Đường truyền Internet</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>5</td>
-                <td>
-                  <div class="bom-item-name">Đường truyền ILL (Internet Leased Line)</div>
-                  <div class="bom-item-note">Dành cho Hub site: Hà Nội, TP. HCM — NetNam cung cấp trực tiếp</div>
-                </td>
-                <td>Per line / site</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Line / tháng</td>
+                <td><span class="bom-item-name">ILL (Internet Leased Line) — NetNam</span></td>
+                <td class="bom-item-note">Đường truyền ILL do NetNam cung cấp tại Hub sites</td>
+                <td><span class="badge badge-opex">Opex</span></td>
+                <td>1 line / site</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>6</td>
-                <td>
-                  <div class="bom-item-name">Đường truyền FTTx</div>
-                  <div class="bom-item-note">Tất cả site — NetNam cung cấp trực tiếp hoặc resell ISP khác</div>
-                </td>
-                <td>Per line / site</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Line / tháng</td>
+                <td><span class="bom-item-name">FTTx — Hub sites</span></td>
+                <td class="bom-item-note">FTTx từ ISP khác tại Hà Nội và TP. Hồ Chí Minh (NetNam resell)</td>
+                <td><span class="badge badge-opex">Opex</span></td>
+                <td>1 line / site</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>7</td>
-                <td>
-                  <div class="bom-item-name">Đường truyền Resell ISP (4G/LTE dự phòng)</div>
-                  <div class="bom-item-note">Tùy chọn — dự phòng cho site branch khi cần thêm kết nối</div>
-                </td>
-                <td>Per line / site</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Line / tháng</td>
+                <td><span class="bom-item-name">FTTx — Branch sites</span></td>
+                <td class="bom-item-note">FTTx từ ISP khác tại các site nhánh (NetNam resell)</td>
+                <td><span class="badge badge-opex">Opex</span></td>
+                <td>1 line / site</td>
               </tr>
 
-              <!-- Group 3: Dịch vụ triển khai -->
+              <!-- Nhóm 3 -->
               <tr class="bom-cat-row g3">
-                <td colspan="5">🔧 Nhóm 3 — Dịch vụ triển khai</td>
+                <td colspan="5">Nhóm 3 — Dịch vụ triển khai</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>8</td>
-                <td>
-                  <div class="bom-item-name">Khảo sát hiện trạng &amp; phân tích yêu cầu</div>
-                  <div class="bom-item-note">Thu thập thông tin site, topo mạng, băng thông, VPN, security policy</div>
-                </td>
+                <td><span class="bom-item-name">Khảo sát chi tiết</span></td>
+                <td class="bom-item-note">Khảo sát hiện trạng, thu thập thông tin site, đường truyền và yêu cầu kỹ thuật</td>
+                <td><span class="badge badge-capex">Capex</span></td>
                 <td>1 gói</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
-                <td class="bom-unit-cell">Gói</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>9</td>
-                <td>
-                  <div class="bom-item-name">Thiết kế giải pháp &amp; lập tài liệu HLD/LLD</div>
-                  <div class="bom-item-note">Sơ đồ kiến trúc, đặc tả kỹ thuật, thiết kế SD-WAN zone, ADVPN, policy</div>
-                </td>
+                <td><span class="bom-item-name">Thiết kế giải pháp</span></td>
+                <td class="bom-item-note">Thiết kế HLD, IP planning, SD-WAN zone, policy, VPN và phương án đường truyền</td>
+                <td><span class="badge badge-capex">Capex</span></td>
                 <td>1 gói</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
-                <td class="bom-unit-cell">Gói</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>10</td>
-                <td>
-                  <div class="bom-item-name">Cấu hình, tích hợp &amp; kiểm thử hệ thống</div>
-                  <div class="bom-item-note">Triển khai toàn bộ thiết bị, cấu hình SD-WAN, kiểm thử failover, routing, policy</div>
-                </td>
+                <td><span class="bom-item-name">Cấu hình &amp; triển khai</span></td>
+                <td class="bom-item-note">Cấu hình thiết bị, tích hợp đường truyền, kiểm thử và đưa vào vận hành tại tất cả các site</td>
+                <td><span class="badge badge-capex">Capex</span></td>
                 <td>1 gói</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
-                <td class="bom-unit-cell">Gói</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>11</td>
-                <td>
-                  <div class="bom-item-name">Bàn giao &amp; nghiệm thu hệ thống</div>
-                  <div class="bom-item-note">Bàn giao tài liệu as-built, hướng dẫn vận hành, đào tạo cơ bản cho khách hàng</div>
-                </td>
+                <td><span class="bom-item-name">Bàn giao tài liệu</span></td>
+                <td class="bom-item-note">Tài liệu cấu hình, sơ đồ kết nối, quy trình vận hành và hướng dẫn sử dụng</td>
+                <td><span class="badge badge-capex">Capex</span></td>
                 <td>1 gói</td>
-                <td class="bom-badge-cell"><span class="badge-capex">Capex</span></td>
-                <td class="bom-unit-cell">Gói</td>
               </tr>
 
-              <!-- Group 4: Dịch vụ quản trị vận hành -->
+              <!-- Nhóm 4 -->
               <tr class="bom-cat-row g4">
-                <td colspan="5">⚙️ Nhóm 4 — Dịch vụ quản trị vận hành</td>
+                <td colspan="5">Nhóm 4 — Dịch vụ quản trị vận hành</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>12</td>
-                <td>
-                  <div class="bom-item-name">Giám sát hệ thống 24/7</div>
-                  <div class="bom-item-note">Theo dõi trạng thái thiết bị, tunnel VPN, đường truyền và cảnh báo sự cố</div>
-                </td>
+                <td><span class="bom-item-name">Quản trị cấu hình tập trung</span></td>
+                <td class="bom-item-note">Quản lý policy, object, firmware và thay đổi cấu hình trên toàn hệ thống FortiGate</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>13</td>
-                <td>
-                  <div class="bom-item-name">Xử lý sự cố &amp; hỗ trợ kỹ thuật</div>
-                  <div class="bom-item-note">Tiếp nhận, phân loại, xử lý sự cố theo SLA; hỗ trợ remote và onsite khi cần</div>
-                </td>
+                <td><span class="bom-item-name">Vận hành SD-WAN policy</span></td>
+                <td class="bom-item-note">Theo dõi và điều chỉnh rule điều hướng lưu lượng theo yêu cầu vận hành thực tế</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>14</td>
-                <td>
-                  <div class="bom-item-name">Quản lý cấu hình &amp; thay đổi (Change Management)</div>
-                  <div class="bom-item-note">Cập nhật policy, routing, security rule theo yêu cầu khách hàng</div>
-                </td>
+                <td><span class="bom-item-name">Giám sát đường truyền &amp; VPN</span></td>
+                <td class="bom-item-note">Theo dõi trạng thái link, SLA, latency, jitter, packet loss, failover và VPN tunnel</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>15</td>
-                <td>
-                  <div class="bom-item-name">Nâng cấp firmware &amp; vá lỗi bảo mật</div>
-                  <div class="bom-item-note">Lên kế hoạch và thực hiện firmware update theo khuyến nghị Fortinet</div>
-                </td>
+                <td><span class="bom-item-name">Phối hợp xử lý sự cố ISP</span></td>
+                <td class="bom-item-note">Làm việc với ISP khi có sự cố đường truyền, cập nhật tình trạng cho khách hàng</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>16</td>
-                <td>
-                  <div class="bom-item-name">Báo cáo định kỳ &amp; đánh giá hiệu năng</div>
-                  <div class="bom-item-note">Báo cáo tháng: uptime, hiệu năng đường truyền, log sự cố, đề xuất cải thiện</div>
-                </td>
+                <td><span class="bom-item-name">Báo cáo định kỳ</span></td>
+                <td class="bom-item-note">Báo cáo tình trạng đường truyền, SLA, sự kiện failover và chất lượng kết nối theo chu kỳ</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
-              <tr class="bom-item">
+              <tr>
                 <td>17</td>
-                <td>
-                  <div class="bom-item-name">Quản lý license &amp; gia hạn dịch vụ</div>
-                  <div class="bom-item-note">Theo dõi hạn license FortiGate/FortiManager/FortiAnalyzer, cảnh báo gia hạn</div>
-                </td>
+                <td><span class="bom-item-name">Hỗ trợ và xử lý sự cố</span></td>
+                <td class="bom-item-note">Tiếp nhận, phân tích và khuyến nghị khắc phục khi phát sinh sự cố thiết bị hoặc cấu hình</td>
+                <td><span class="badge badge-opex">Opex</span></td>
                 <td>1 gói / tháng</td>
-                <td class="bom-badge-cell"><span class="badge-opex">Opex</span></td>
-                <td class="bom-unit-cell">Gói / tháng</td>
               </tr>
 
             </tbody>
@@ -1281,56 +1282,63 @@
         </div>
 
         <div class="bom-note">
-          <strong>⚠ Lưu ý:</strong> Danh mục trên <strong>chưa bao gồm</strong> chi phí hạ tầng phòng máy (rack, UPS, cáp kết nối nội bộ) và vật tư phụ (SFP module, dây cáp quang, phụ kiện lắp đặt). Các hạng mục này sẽ được thống kê và báo giá riêng sau khi hoàn thành giai đoạn khảo sát thực địa.
+          ⚠️ Bảng danh mục trên chưa bao gồm chi phí hạ tầng và vật tư phụ (cáp, rack, nguồn, phụ kiện lắp đặt, v.v.). Số lượng thiết bị và đường truyền cụ thể sẽ được xác định sau khi có kết quả khảo sát chi tiết.
         </div>
 
       </section>
 
-      <!-- Page nav -->
-      <div style="margin-top: 60px;">
-        <nav class="page-nav" style="padding: 0; max-width: 100%;">
-          <a href="03-hien-trang-khach-hang.html" class="nav-btn prev">
-            <span class="nav-arrow">←</span>
-            <span class="nav-text">
-              <span class="nav-lbl">Quay lại</span>
-              <span class="nav-ttl">03 · Hiện trạng KH</span>
-            </span>
-          </a>
-          <a href="05-cach-thuc-hoat-dong.html" class="nav-btn next">
-            <span class="nav-arrow">→</span>
-            <span class="nav-text">
-              <span class="nav-lbl">Phần tiếp theo</span>
-              <span class="nav-ttl">05 · Cách thức hoạt động</span>
-            </span>
-          </a>
-        </nav>
-      </div>
-
     </main>
+  </div><!-- /.proposal-layout -->
+
+</div><!-- /#page-wrapper -->
+
+<!-- ── Lightbox overlay ── -->
+<div class="lb-overlay" id="lb-overlay">
+  <div class="lb-inner">
+    <div class="lb-close" id="lb-close">&#x2715;</div>
+    <img src="" alt="" id="lb-img">
+    <div class="lb-caption" id="lb-caption"></div>
   </div>
+</div>
 
-  <!-- ══ FOOTER ══ -->
-  <footer class="footer">
-    <span>© 2025 NetNam Corporation — Tài liệu mang tính đề xuất, chỉ lưu hành nội bộ</span>
-    <span>SD-WAN Managed Services Proposal · v1.0</span>
-  </footer>
+<script>
+  // ── Sidebar scroll-spy ──
+  const sections = document.querySelectorAll('.anchor-target');
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+  sections.forEach(s => observer.observe(s));
 
-  <script>
-    const sections = document.querySelectorAll('.anchor-target');
-    const navLinks = document.querySelectorAll('.sidebar-nav a');
+  // ── Lightbox ──
+  const overlay  = document.getElementById('lb-overlay');
+  const lbImg    = document.getElementById('lb-img');
+  const lbCap    = document.getElementById('lb-caption');
+  const lbClose  = document.getElementById('lb-close');
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(l => l.classList.remove('active'));
-          const active = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
+  document.querySelectorAll('.hld-img-wrap').forEach(wrap => {
+    wrap.addEventListener('click', () => {
+      lbImg.src = wrap.dataset.lbSrc;
+      lbCap.textContent = wrap.dataset.lbCap || '';
+      overlay.classList.add('open');
+    });
+  });
 
-    sections.forEach(s => observer.observe(s));
-  </script>
+  lbClose.addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') overlay.classList.remove('open');
+  });
+</script>
 
 </body>
 </html>
